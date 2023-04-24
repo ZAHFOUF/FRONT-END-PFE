@@ -20,8 +20,12 @@ export default function ProductsPage() {
     setOpenFilter(false);
   };
 
+  
+
   return (
     <>
+    
+    
       <Helmet>
         <title> Dashboard: Products | Minimal UI </title>
       </Helmet>

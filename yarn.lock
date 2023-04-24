@@ -2140,6 +2140,18 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/lodash-es@^4.17.6":
+  "integrity" "sha512-z0ptr6UI10VlU6l5MYhGwS4mC8DZyYer2mCoyysZtSF7p26zOX8UpbrV0YpNYLGS8K4PUFIyEr62IMFFjveSiQ=="
+  "resolved" "https://registry.npmjs.org/@types/lodash-es/-/lodash-es-4.17.7.tgz"
+  "version" "4.17.7"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*":
+  "integrity" "sha512-r22s9tAS7imvBt2lyHC9B8AGwWnXaYb1tY09oyLkXDs4vArpYJzw09nj8MLx5VfciBPGIb+ZwG0ssYnEPJxn/g=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.194.tgz"
+  "version" "4.14.194"
+
 "@types/mime@*":
   "integrity" "sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA=="
   "resolved" "https://registry.npmjs.org/@types/mime/-/mime-3.0.1.tgz"
@@ -3547,6 +3559,11 @@
     "path-key" "^3.1.0"
     "shebang-command" "^2.0.0"
     "which" "^2.0.1"
+
+"crypto-js@^4.1.1":
+  "integrity" "sha512-o2JlM7ydqd3Qk9CA0L4NL6mTzU2sdx96a+oOfPu8Mkl/PK51vSyoi8/rQ8NknZtk44vq15lmhAj9CIAGwgeWKw=="
+  "resolved" "https://registry.npmjs.org/crypto-js/-/crypto-js-4.1.1.tgz"
+  "version" "4.1.1"
 
 "crypto-random-string@^2.0.0":
   "integrity" "sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA=="
@@ -8384,20 +8401,22 @@
   "resolved" "https://registry.npmjs.org/signal-exit/-/signal-exit-3.0.7.tgz"
   "version" "3.0.7"
 
-"simplebar-core@^1.2.1":
-  "integrity" "sha512-dgX6qDOSDM3+crxFstIKOlxyxnD3NYGRPm7CqmAtnNfFLVeadrydym5eNpduIO7aDFU/rayS6hEdrcxO0WBqnQ=="
-  "resolved" "https://registry.npmjs.org/simplebar-core/-/simplebar-core-1.2.1.tgz"
-  "version" "1.2.1"
+"simplebar-core@^1.2.4":
+  "integrity" "sha512-P+Sqshef4fq3++gQ82TgNYcgl3qZFSCP5jS2/8NMmw18oagXOijMzs1G+vm6RUY3oMvpwH3wGoqh9u6SyDjHfQ=="
+  "resolved" "https://registry.npmjs.org/simplebar-core/-/simplebar-core-1.2.4.tgz"
+  "version" "1.2.4"
   dependencies:
+    "@types/lodash-es" "^4.17.6"
     "can-use-dom" "^0.1.0"
+    "lodash" "^4.17.21"
     "lodash-es" "^4.17.21"
 
-"simplebar-react@^3.2.1":
-  "integrity" "sha512-viHQs/34ZQk956b88Kl7+VckWO8DKOhg2Hkl8kjPv2q16w+/nnOJOGhZKrpj/egMGqDpQywou2AhdRkAM0oddA=="
-  "resolved" "https://registry.npmjs.org/simplebar-react/-/simplebar-react-3.2.1.tgz"
-  "version" "3.2.1"
+"simplebar-react@^3.2.4":
+  "integrity" "sha512-ogLN79e7JUm82wJChD7NSUB+4EHCFvDkjXpiu8hT1Alk7DnCekUWds61NXcsP9jC97KOgF5To/AVjYFbX0olgg=="
+  "resolved" "https://registry.npmjs.org/simplebar-react/-/simplebar-react-3.2.4.tgz"
+  "version" "3.2.4"
   dependencies:
-    "simplebar-core" "^1.2.1"
+    "simplebar-core" "^1.2.4"
 
 "sisteransi@^1.0.5":
   "integrity" "sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg=="

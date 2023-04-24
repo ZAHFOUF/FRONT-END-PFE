@@ -1,29 +1,31 @@
 // component
 import SvgColor from '../../../components/svg-color';
-
+import { respo } from '../../../_mock/user'
 // ----------------------------------------------------------------------
 
 const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
+const navConfigFilter = []
+
 
 const navConfig = [
   {
     title: 'dashboard',
-    path: '/dashboard/app',
+    path: '/dashboard/',
     icon: icon('ic_analytics'),
   },
   {
     title: 'user',
-    path: '/dashboard/user',
+    path: '/user',
     icon: icon('ic_user'),
   },
   {
     title: 'product',
-    path: '/dashboard/products',
+    path: '/products',
     icon: icon('ic_cart'),
   },
   {
     title: 'blog',
-    path: '/dashboard/blog',
+    path: '/blog',
     icon: icon('ic_blog'),
   },
   {
@@ -38,4 +40,15 @@ const navConfig = [
   },
 ];
 
-export default navConfig;
+respo().map((e1)=>{
+   // eslint-disable-next-line no-var
+   var item = navConfig.filter((e)=> e.title === e1)
+   navConfigFilter.push(item[0])
+   return 0
+ 
+}) 
+
+
+
+
+export default navConfigFilter;

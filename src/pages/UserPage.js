@@ -1,7 +1,11 @@
+/* eslint-disable prefer-const */
+/* eslint-disable array-callback-return */
+/* eslint-disable import/order */
 import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
+import { filter , sample } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
+import axios  from '../api/axios'
 // @mui
 import {
   Card,
@@ -29,18 +33,22 @@ import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import { faker } from '@faker-js/faker';
+
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
   { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
+
+
+
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +95,37 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [USERLIST,setUSERLIST] = useState([])
+
+  useEffect(() => {
+
+    axios.get("/api/users").then((e)=>{
+
+      // eslint-disable-next-line prefer-destructuring
+      const data = e.data.data
+
+      let users = []
+      const icon =["12","19"]
+      
+    
+      data.map((e,i)=>{
+         users.push({
+          id: faker.datatype.uuid(),
+          avatarUrl: `/assets/images/avatars/avatar_${icon[i]}.jpg`,
+          name: e.name ,
+          company: e.email,
+          isVerified: faker.datatype.boolean(),
+          status: "active",
+          role: e.role[0].name,
+         })
+      })
+
+     setUSERLIST(users)
+    
+    
+   });
+
+  },[])
 
   const handleOpenMenu = (event) => {
     setOpen(event.currentTarget);
@@ -145,6 +184,8 @@ export default function UserPage() {
   const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
+
+  
 
   return (
     <>
