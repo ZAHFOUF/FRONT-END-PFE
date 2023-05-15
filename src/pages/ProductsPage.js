@@ -1,9 +1,11 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-var */
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
-import { Container , Box , CircularProgress , Stack, Typography } from '@mui/material';
+import { Container , Box , CircularProgress , Stack, Typography , Button } from '@mui/material';
 
 import { useContextProvider } from '../context/contextProvider';
 
@@ -14,6 +16,10 @@ import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } fro
 import PRODUCTS from '../_mock/products';
 import { actionsOrganismes } from '../store/index';
 import axios from '../api/axios'
+import Iconify from '../components/iconify';
+
+let globalData = []
+var count = 20
 
 
 // ----------------------------------------------------------------------
@@ -38,16 +44,46 @@ const dispatch = useDispatch()
 const navigate = useNavigate()
 
 
-
 const { _setToken , user , token , setUser   } = useContextProvider()
 
+
+
+// eslint-disable-next-line no-unused-vars
+
+const generateItems = (data) => {
+  const items = [];
+
+  for (let i = 0; i < count; i++) {
+    if (i < data.length) {
+      items.push(data[i]);
+    } else {
+      break; // Break the loop if there are no more items in the data array
+    }
+  }
+
+  return items;
+};
+
+const handelClick = () =>{
+  count += 20
+
+  const data = generateItems(globalData)
+  console.log(data,"count",count);
+  dispatch(actionsOrganismes.loadOrganismes(data))
+}
 /* ----------------------------------- axios load  ---------------------------------------------- */
 
 useEffect(()=>{
 
   axios.get("/api/organisations").then((e)=>{
       setOpen1('none')
-      dispatch(actionsOrganismes.loadOrganismes(e.data.organisations))
+      globalData = e.data.organisations
+      const data = generateItems(e.data.organisations)
+
+      
+      
+
+      dispatch(actionsOrganismes.loadOrganismes(data))
   }).catch((e)=>{
        
     if ( e.response.status === 401 ) {
@@ -105,6 +141,14 @@ useEffect(()=>{
     </Box>
 
         <ProductList products={organismes} />
+        <div style={{padding:'50px' , display:'flex' , justifyContent:'center'}}>
+
+        <Button onClick={handelClick} variant="contained" endIcon={<Iconify icon="streamline:interface-arrows-synchronize-arrows-loading-load-sync-synchronize-arrow-reload" />}>
+  Load More
+</Button>
+
+        </div>
+        
         <ProductCartWidget />
       </Container>
     </>
