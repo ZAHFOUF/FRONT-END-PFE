@@ -1,15 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import { Container , Box , CircularProgress , Stack, Typography } from '@mui/material';
+
+import { useContextProvider } from '../context/contextProvider';
 
 // @mui
-import { Container , Box , CircularProgress , Stack, Typography } from '@mui/material';
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
 import PRODUCTS from '../_mock/products';
 import { actionsOrganismes } from '../store/index';
 import axios from '../api/axios'
+
 
 // ----------------------------------------------------------------------
 
@@ -30,9 +35,11 @@ export default function ProductsPage() {
 })
 
 const dispatch = useDispatch()
+const navigate = useNavigate()
 
 
 
+const { _setToken , user , token , setUser   } = useContextProvider()
 
 /* ----------------------------------- axios load  ---------------------------------------------- */
 
@@ -41,6 +48,27 @@ useEffect(()=>{
   axios.get("/api/organisations").then((e)=>{
       setOpen1('none')
       dispatch(actionsOrganismes.loadOrganismes(e.data.organisations))
+  }).catch((e)=>{
+       
+    if ( e.response.status === 401 ) {
+
+      
+     
+      Swal.fire({title:e.response.data.message,icon:"error",timer:1500})
+      setTimeout(() => {
+        localStorage.removeItem("user_session")
+        _setToken(0)
+        setUser({})
+        navigate("/login")
+      
+
+       
+      }, 1500);
+
+      
+      
+
+    }
   })
 
 },[dispatch])

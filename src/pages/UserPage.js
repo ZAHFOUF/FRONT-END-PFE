@@ -66,6 +66,7 @@ import AlertDialogSlide from '../components/dailog/index';
 import Swal from 'sweetalert2';
 import { Message } from '@mui/icons-material';
 import { useContextProvider } from '../context/contextProvider';
+import { useNavigate } from 'react-router-dom';
 
 
 // --------------------------------------------------------------------------
@@ -158,6 +159,8 @@ export default function UserPage(props) {
   const [photoSrc,setPhoto] = useState(" ")
 
   const dispatch = useDispatch()
+  const navigate = useNavigate();
+
 
 
 
@@ -292,6 +295,7 @@ formData.append('photo', data.photo); // where `file` is a File object
 const headers = {  'Content-Type': 'multipart/form-data' }
 
 
+
       axios.post("/api/users",formData,headers).then((e)=>{
 
         console.log("data",e.data);
@@ -370,9 +374,9 @@ const handelPrenom = (e)=>{
   setuserUpdate({name: userUpdate.name , phone:userUpdate.phone , email:  userUpdate.email , prenom:e.target.value})
 }
 
+const { _setToken , setUser } = useContextProvider()
 
 /* ----------------------------------- axios load data -------------------------------------------*/
-
 
 
 useEffect(()=>{
@@ -385,6 +389,8 @@ let users = []
 
   
     const data = e.data.data
+
+    console.log(data);
 
     
     
@@ -414,8 +420,20 @@ let users = []
   }).catch((e)=>{
     dispatch(actionsUsers.loadUsers([]))
     
-    if (e.response) {
-      Swal.fire({title:e.response.data.message,icon:"error"})
+    if ( e.response.status === 401 ) {
+     
+      setOpen6(false)
+      Swal.fire({title:e.response.data.message,icon:"error",timer:1500})
+      setTimeout(() => {
+        localStorage.removeItem("user_session")
+        _setToken(0)
+        setUser({})
+        navigate("/login")
+      }, 1500);
+
+      
+      
+
     }else{
       Swal.fire({title:e.message,icon:"error"})
     }
@@ -424,7 +442,12 @@ let users = []
 },[dispatch])
 
 
-  
+  axios.get("/api/users/2").then((e)=>{
+    console.log("user",e);
+    
+  }).catch((e)=>{
+     console.log(e);
+  })
 
 /* ----------------------------------------------------------------------------------------*/
 
