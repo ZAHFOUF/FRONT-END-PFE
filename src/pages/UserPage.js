@@ -310,7 +310,7 @@ const headers = {  'Content-Type': 'multipart/form-data' }
          dispatch(actionsUsers.addUsers(resUser)) 
          setOpen2(false)
          setOpen3(true)
-         settextAlert('User added successfully !')
+         settextAlert('Employeeadded successfully !')
        
       }).catch((e)=> {
           // if error
@@ -346,7 +346,7 @@ const headers = {  'Content-Type': 'multipart/form-data' }
          dispatch(actionsUsers.upUsers({id:userPoint,data:resUser})) 
          setOpen2(false)
          setOpen3(true)
-         settextAlert('User updated successfully !') 
+         settextAlert('Employeeupdated successfully !') 
        
       })
     }
@@ -440,7 +440,7 @@ let users = []
   
 
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Employee| Minimal UI </title>
       </Helmet>
 
       <Container>
@@ -489,12 +489,12 @@ let users = []
     </Box>
         
         <form onSubmit={handleSumbit} >
-        <DialogTitle>  {up === false ? ' Add New User' : ' Update User' }</DialogTitle>
+        <DialogTitle>  {up === false ? ' Add New Employee' : ' Update User' }</DialogTitle>
         <DialogContent>
       
         
           <DialogContentText>
-          {up === false ? ' Here You can Add New User to Your App' : 'Here You can Update Your User' } 
+          {up === false ? ' Here You can Add New Employeeto Your App' : 'Here You can Update Your Employee' } 
           </DialogContentText>
 
           
@@ -613,13 +613,13 @@ let users = []
 
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+          Employees
           </Typography>
 
       
           {
             access.C &&  <Button onClick={handleClickOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New User
+            New Employees
           </Button>
           }
          

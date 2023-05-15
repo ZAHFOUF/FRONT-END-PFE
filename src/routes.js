@@ -25,7 +25,7 @@ export default function Router() {
   const paths = [
     
     { path: 'dashboard', element: <DashboardAppPage access={0}/> },
-    { path: 'user', element: <UserPage  access={0} /> },
+    { path: 'employees', element: <UserPage  access={0} /> },
     { path: 'organismes', element: <ProductsPage access={0}/> },
     { path: 'blog', element: <BlogPage access={0}/> },
     { path: 'projects', element: <Projects access={0} /> },
@@ -45,7 +45,7 @@ export default function Router() {
  
       if (item[0].path ===  'dashboard') {
         item[0].element = <DashboardAppPage access={e1.access}/>
-      }else if (item[0].path ===  'user' ){
+      }else if (item[0].path ===  'employees' ){
         item[0].element = <UserPage  access={e1.access}/>
       }else if (item[0].path ===  'organismes' ){
         item[0].element = <ProductsPage  access={e1.access}/>

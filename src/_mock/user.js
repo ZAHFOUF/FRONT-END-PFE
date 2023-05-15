@@ -41,15 +41,15 @@ import axios from '../api/axios';
 }) */
 
 
-/* "projects",'user',"blog" */
+/* "projects",'employees',"blog" */
 
 const roles ={
-  all:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} }, {reccord:'projects',access:{C:true,R:true,U:true,D:true}} , {reccord:'user',access:{C:true,R:true,U:true,D:true} } , {reccord:'blog',access:{C:true,R:true,U:true,D:true} }],
-  admin:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} } , {reccord:'user',access:{C:true,R:true,U:true,D:true,DU:true} },{reccord:'projects',access:{C:true,R:true,U:true,D:true}}],
-  directeur: [{reccord:'organismes',access:{C:true,R:true,U:true,D:true} },{reccord:'blog',access:{C:true,R:true,U:true,D:true} },{reccord:'user',access:{C:false,R:true,U:false,D:false,DU:false} }] ,
+  all:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} }, {reccord:'projects',access:{C:true,R:true,U:true,D:true}} , {reccord:'employees',access:{C:true,R:true,U:true,D:true} } , {reccord:'blog',access:{C:true,R:true,U:true,D:true} }],
+  admin:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} } , {reccord:'employees',access:{C:true,R:true,U:true,D:true,DU:true} },{reccord:'projects',access:{C:true,R:true,U:true,D:true}}],
+  directeur: [{reccord:'organismes',access:{C:true,R:true,U:true,D:true} },{reccord:'blog',access:{C:true,R:true,U:true,D:true} },{reccord:'employees',access:{C:false,R:true,U:false,D:false,DU:false} }] ,
   comptable:[{reccord:'blog',access:{C:true,R:true,U:true,D:true} }] ,
   secretaire:[{reccord:'organismes',access:{C:true,R:true,U:true,D:true} }] ,
-  chef_projet:[{reccord:'user',access:{C:false,R:true,U:false,D:false,DU:false} } , {reccord:'projects',access:{C:true,R:true,U:true,D:true}} ] 
+  chef_projet:[{reccord:'employees',access:{C:false,R:true,U:false,D:false,DU:false} } , {reccord:'projects',access:{C:true,R:true,U:true,D:true}} ] 
 
 } 
    

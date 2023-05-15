@@ -104,8 +104,8 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
-    title: 'user',
-    path: '/user',
+    title: 'employees',
+    path: '/employees',
     icon: icon('ic_user'),
   },
   {
@@ -160,33 +160,6 @@ if (localStorage.getItem("user_session")) {
 const role = hash.toString(enc.Utf8)
 user.icon =  key.user.icon
 }
-
-/* ------------------------------------ axios  ------------------------------------------------- */
-
-
-
-
-
-
-
-
-
-
-
-
-/* ------------------------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
