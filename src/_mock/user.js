@@ -2,20 +2,26 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable prefer-const */
 /* eslint-disable import/no-mutable-exports */
+import { useDispatch  } from 'react-redux'
+
+
 import { faker } from '@faker-js/faker';
 import { sample } from 'lodash';
 import { AES, enc } from 'crypto-js';
+import { actionsUsers } from '../store'
+
 import axios from '../api/axios';
 
 
 // ----------------------------------------------------------------------
 
-let users = []
+ let users = []
 
 
-axios.get("/api/users").then((e)=>{
+/* axios.get("/api/users").then((e)=>{
 
   const data = e.data.data
+  const dispatch = useDispatch()
 
   data.map((e)=>{
      users.push({
@@ -29,18 +35,25 @@ axios.get("/api/users").then((e)=>{
      })
   })
 
+  dispatch(actionsUsers.addUsers(users))
+
   
-})
+}) */
 
 
-
+/* "projects",'user',"blog" */
 
 const roles ={
-  all:['dashboard',"projects",'user',"blog"],
-  admin:['dashboard',"projects",'user'],
-  directeur: ["projects","blog"] ,
- 
+  all:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} }, {reccord:'projects',access:{C:true,R:true,U:true,D:true}} , {reccord:'user',access:{C:true,R:true,U:true,D:true} } , {reccord:'blog',access:{C:true,R:true,U:true,D:true} }],
+  admin:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} } , {reccord:'user',access:{C:true,R:true,U:true,D:true,DU:true} },{reccord:'projects',access:{C:true,R:true,U:true,D:true}}],
+  directeur: [{reccord:'organismes',access:{C:true,R:true,U:true,D:true} },{reccord:'blog',access:{C:true,R:true,U:true,D:true} },{reccord:'user',access:{C:false,R:true,U:false,D:false,DU:false} }] ,
+  comptable:[{reccord:'blog',access:{C:true,R:true,U:true,D:true} }] ,
+  secretaire:[{reccord:'organismes',access:{C:true,R:true,U:true,D:true} }] ,
+  chef_projet:[{reccord:'user',access:{C:false,R:true,U:false,D:false,DU:false} } , {reccord:'projects',access:{C:true,R:true,U:true,D:true}} ] 
+
 } 
+   
+
 
 
 export function respo () {
@@ -63,6 +76,9 @@ export function respo () {
   
 }
 
-console.log(users);
+export const settings = {OTP:false}
+
+ 
+
 
 export default users;

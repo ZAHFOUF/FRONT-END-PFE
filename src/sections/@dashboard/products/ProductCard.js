@@ -1,12 +1,11 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack , Button  } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// utils
-import { fCurrency } from '../../../utils/formatNumber';
-// components
-import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
+import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
+import Iconify from '../../../components/iconify';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -24,28 +23,25 @@ ShopProductCard.propTypes = {
   product: PropTypes.object,
 };
 
+const getRandomImage = () => {
+  const width = Math.floor(Math.random() * 400) + 200; // Generate a random width between 200 and 600
+  const height = Math.floor(Math.random() * 400) + 200; // Generate a random height between 200 and 600
+  const baseUrl = 'https://picsum.photos/'; // Replace with the base URL of the image source you'd like to use
+  const imageUrl = `${baseUrl}${width}/${height}`; // Construct the image URL with the width and height
+
+  return imageUrl;
+};
+
+// Example usage:
+
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, address, contactPhone , contactEmail } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
-          <Label
-            variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
-            sx={{
-              zIndex: 9,
-              top: 16,
-              right: 16,
-              position: 'absolute',
-              textTransform: 'uppercase',
-            }}
-          >
-            {status}
-          </Label>
-        )}
-        <StyledProductImg alt={name} src={cover} />
+    
+        <StyledProductImg alt={name} src={getRandomImage()} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -53,25 +49,38 @@ export default function ShopProductCard({ product }) {
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>
-        </Link>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
-          <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
-            &nbsp;
-            {fCurrency(price)}
+
+          
+
+            <Typography mt={1} variant="body2" noWrap>
+           
+            <span style={{display:'flex' , alignItems:'center'}}>  <Iconify sx={{width:18}} icon="ic:baseline-phone" /> {contactPhone} </span>
+
+            
+            
           </Typography>
-        </Stack>
+
+          
+          <Typography mt={1} variant="body2" noWrap>
+           
+           <span style={{display:'flex' , alignItems:'center'}}>  <Iconify sx={{width:18}} icon="mdi:address-marker-outline" /> {address} </span>
+
+           
+           
+         </Typography>
+
+
+         <Button  href={`mailto:${contactEmail}`}  style={{marginTop:'10px',color:'#FFF'}} color="success" variant="contained" endIcon={ <Iconify sx={{width:18}} color='#FFF' icon="ic:round-mail-outline" />}>
+  Contacter
+</Button>
+
+
+
+
+
+          
+        </Link>
       </Stack>
     </Card>
   );

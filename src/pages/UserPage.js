@@ -1,11 +1,19 @@
+/* eslint-disable no-useless-concat */
+/* eslint-disable prefer-template */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable prefer-const */
 /* eslint-disable array-callback-return */
 /* eslint-disable import/order */
 import { Helmet } from 'react-helmet-async';
-import { filter , sample } from 'lodash';
+import { filter , sample, update } from 'lodash';
 import { sentenceCase } from 'change-case';
 import { useState , useEffect } from 'react';
-import axios  from '../api/axios'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
+
+import { actionsUsers } from '../store';
 // @mui
 import {
   Card,
@@ -25,7 +33,23 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
+  Dialog ,
+  DialogTitle ,
+  TextField ,
+  DialogContentText,
+  DialogContent ,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select ,
+  Collapse ,
+  Box ,
+  Alert ,
+  Backdrop ,
+  CircularProgress
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+
 // components
 import Label from '../components/label';
 import Iconify from '../components/iconify';
@@ -34,15 +58,23 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
 import { faker } from '@faker-js/faker';
+import { useDispatch , useSelector } from 'react-redux';
+import '../theme/css/index.css'
+import axios from '../api/axios'
+import AlertDialogSlide from '../components/dailog/index';
+
+import Swal from 'sweetalert2';
+import { Message } from '@mui/icons-material';
+import { useContextProvider } from '../context/contextProvider';
 
 
-// ----------------------------------------------------------------------
+// --------------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'email', label: 'Email', alignRight: false },
+  { id: 'phone', label: 'phone', alignRight: false },
   { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
@@ -81,8 +113,13 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+const load = true
+
+console.log(load);
+
+export default function UserPage(props) {
   const [open, setOpen] = useState(null);
+  const [otp, setOtp] = useState('');
 
   const [page, setPage] = useState(0);
 
@@ -95,41 +132,94 @@ export default function UserPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [USERLIST,setUSERLIST] = useState([])
 
-  useEffect(() => {
+  const [open2, setOpen2] = useState(false)
 
-    axios.get("/api/users").then((e)=>{
+  const [open3, setOpen3] = useState(false)
+  const [open4, setOpen4] = useState(false)
+  const [open5, setOpen5] = useState(false)
+  const [open6, setOpen6] = useState(true)
 
-      // eslint-disable-next-line prefer-destructuring
-      const data = e.data.data
+  const [message, setMessage] = useState(' ')
 
-      let users = []
-      const icon =["12","19"]
-      
-    
-      data.map((e,i)=>{
-         users.push({
-          id: faker.datatype.uuid(),
-          avatarUrl: `/assets/images/avatars/avatar_${icon[i]}.jpg`,
-          name: e.name ,
-          company: e.email,
-          isVerified: faker.datatype.boolean(),
-          status: "active",
-          role: e.role[0].name,
-         })
-      })
 
-     setUSERLIST(users)
-    
-    
-   });
 
-  },[])
+  const [userPoint,setuserPoint] = useState(null)
 
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const [up,setUp] = useState(false)
+
+  const [userUpdate,setuserUpdate] = useState({})
+
+
+  const [age, setAge] = useState('admin')
+
+  const [textAlert,settextAlert] = useState(" ")
+
+  const [photoSrc,setPhoto] = useState(" ")
+
+  const dispatch = useDispatch()
+
+
+
+  
+  const handleChange = (event) => {
+    setAge(event.target.value);
   };
+
+
+  const handleClickOpen = () => {
+    setOpen2(true);
+    setOpen3(false)
+    setuserUpdate({})
+    setAge('admin')
+    setPhoto(' ')
+    setOpen5(false)
+  };
+
+  const handleClose = () => {
+      setOpen2(false);
+      setUp(false)
+  };
+
+  const handleClose6 = () => {
+    setOpen6(false);
+};
+
+  const access = props.access;
+
+
+  const USERLIST = useSelector((state)=>{
+     return state.users
+})
+
+const handleChangePhoto = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const photoURL = URL.createObjectURL(file);
+    setPhoto(photoURL)
+  }
+};
+
+  const handleOpenMenu = (event,id) => {
+    setOpen(event.currentTarget);
+    setuserPoint(id)
+    console.log(userPoint,'vs',id);
+  };
+
+  const handelDelete =()=>{
+     setOpen4(true)
+     setOpen(null)
+  }
+
+  const handelUpdate =()=>{
+     const user = USERLIST.filter((e)=> e.id === userPoint)
+      setuserUpdate(user[0])
+     setAge(user[0].role)
+    setOpen(null)
+    setUp(true)
+    setPhoto(user[0].avatarUrl)
+    setOpen2(true)
+ }
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -185,23 +275,377 @@ export default function UserPage() {
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
+  const handleSumbit = (e)=>{
+    e.preventDefault()
+    if (up === false) {
+      
+      const data = {photo:e.target[0].files[0],name:e.target[1].value,prenom:e.target[2].value,email:e.target[3].value,phone_number:e.target[4].value,roles:[e.target[5].value]}
+     
+      const formData = new FormData();
+formData.append('name', data.name);
+formData.append('prenom', data.prenom);
+formData.append('phone_number', data.phone_number);
+formData.append('email', data.email);
+formData.append('roles', data.roles);
+formData.append('photo', data.photo); // where `file` is a File object
+
+const headers = {  'Content-Type': 'multipart/form-data' }
+
+
+      axios.post("/api/users",formData,headers).then((e)=>{
+
+        console.log("data",e.data);
+       
+        
+         const resUser = {
+          id: e.data.user.id,
+          avatarUrl: e.data.user.photo,
+          name: e.data.user.nom ,
+          prenom : e.data.user.prenom ,
+          company: e.data.user.email,
+          phone: e.data.user.phone_number,
+          status: 'active',
+          role:data.roles[0] ,
+         }
+         dispatch(actionsUsers.addUsers(resUser)) 
+         setOpen2(false)
+         setOpen3(true)
+         settextAlert('User added successfully !')
+       
+      }).catch((e)=> {
+          // if error
+
+          setMessage(e.response.data.message);
+
+          setOpen5(true)
+
+
+          
+      })
+    }else if (up === true) {
+
+      const data = {photo:null,name:e.target[1].value,prenom:e.target[2].value,email:e.target[3].value,phone_number:e.target[4].value,roles:[e.target[5].value]}
+     
+    
+
+      axios.put(`/api/users/${userPoint}`,data).then((e)=>{
+
+        console.log(e.data);
+       
+        
+        const resUser = {
+          id: e.data.user.id,
+          avatarUrl: e.data.user.photo,
+          name: e.data.user.nom ,
+          prenom : e.data.user.prenom ,
+          company: e.data.user.email,
+          phone: e.data.user.phone_number,
+          status: 'active',
+          role:data.roles[0] ,
+         }
+         dispatch(actionsUsers.upUsers({id:userPoint,data:resUser})) 
+         setOpen2(false)
+         setOpen3(true)
+         settextAlert('User updated successfully !') 
+       
+      })
+    }
+  
+
+
+
+    
+  }
+
+  const handelName = (e)=>{
+        console.log(e);
+        setuserUpdate({name:e.target.value , phone:userUpdate.phone  , email: userUpdate.email , prenom:userUpdate.prenom})
+  }
+
+  const handelEmail = (e)=>{
+    setuserUpdate({name: userUpdate.name , phone:userUpdate.phone , email:  e.target.value , prenom:userUpdate.prenom})
+}
+
+const handelPrenom = (e)=>{
+  setuserUpdate({name: userUpdate.name , phone:userUpdate.phone , email:  userUpdate.email , prenom:e.target.value})
+}
+
+
+/* ----------------------------------- axios load data -------------------------------------------*/
+
+
+
+useEffect(()=>{
+
+ 
+let users = []
+
+  axios.get("/api/users").then((e)=>{
+    setOpen6(false)
+
+  
+    const data = e.data.data
+
+    
+    
+  
+    data.map((e,i)=>{
+       users.push({
+        id: e.id,
+        avatarUrl: e.photo,
+        name: e.nom  ,
+        prenom :e.prenom ,
+        company: e.email,
+        isVerified: faker.datatype.boolean(),
+        status: 'active',
+        phone:e.phone_number ,
+        role: e.role[0].name,
+       })
+  
+       return 0
+  
+    })
+  
+    
+  
+    dispatch(actionsUsers.loadUsers(users))
+  
+  
+  }).catch((e)=>{
+    dispatch(actionsUsers.loadUsers([]))
+    
+    if (e.response) {
+      Swal.fire({title:e.response.data.message,icon:"error"})
+    }else{
+      Swal.fire({title:e.message,icon:"error"})
+    }
+  
+  })
+},[dispatch])
+
+
+  
+
+/* ----------------------------------------------------------------------------------------*/
+
+
+
+
+/* -------------------------------- return the component ----------------------------------------------*/
   
 
   return (
     <>
+
+  
+
       <Helmet>
         <title> User | Minimal UI </title>
       </Helmet>
 
       <Container>
+
+
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open6}
+        onClick={handleClose6}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+        
+
+        <AlertDialogSlide id={userPoint} open={open4} setOpen={setOpen4} />
+        
+
+     
+
+
+        <Dialog open={open2} onClose={handleClose}>
+
+        <Box sx={{ width: '80%' , margin:'10px'}}>
+      <Collapse in={open5}>
+        <Alert
+        variant="filled" severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen5(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+           This is an error - {message}
+        </Alert>
+      </Collapse>
+    
+    </Box>
+        
+        <form onSubmit={handleSumbit} >
+        <DialogTitle>  {up === false ? ' Add New User' : ' Update User' }</DialogTitle>
+        <DialogContent>
+      
+        
+          <DialogContentText>
+          {up === false ? ' Here You can Add New User to Your App' : 'Here You can Update Your User' } 
+          </DialogContentText>
+
+          
+
+          <label className='labelPhoto' htmlFor="profilePhoto">
+            <input
+              accept="image/*"
+              id="profilePhoto"
+              type="file"
+              style={{ display: 'none' ,}}
+
+              disabled={up === true ? true : false}
+              onChange={handleChangePhoto}
+            />
+            <Avatar
+              src={photoSrc}
+              alt={userUpdate.name}
+              sx={{ width: 75, height: 75, cursor : up === true ? 'no-drop' : 'pointer'}}
+            />
+          </label>
+       
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            value={userUpdate.name}
+            onChange={handelName}
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+
+<TextField
+            
+            margin="dense"
+            id="name"
+            value={userUpdate.prenom}
+            onChange={handelPrenom}
+            label="Prenom"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+
+           <TextField
+           required
+            margin="dense"
+            id="email"
+            onChange={handelEmail}
+            value={userUpdate.company}
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+
+          <div style={{marginTop:'30px'}}>
+
+          <PhoneInput
+
+          placeholder='phone number'
+          
+          disabled={up === true ? true : false}
+          country={'ma'}
+          value={userUpdate.phone}
+         
+        />
+
+          </div>
+
+          
+
+          
+
+          
+
+
+<FormControl  className='select' sx={{ m: 1, minWidth: 100 }}>
+        <InputLabel id="demo-simple-select-autowidth-label"> Roles </InputLabel>
+        <Select
+        required
+          labelId="demo-simple-select-autowidth-label"
+          id="demo-simple-select-autowidth"
+          value={age}
+          onChange={handleChange}
+          autoWidth
+          label="Age"
+          
+        >
+         
+          <MenuItem value={'admin'}> admin </MenuItem>
+          <MenuItem value={'directeur'}>directeur</MenuItem>
+          <MenuItem value={'chef_projet'}>chef_projet</MenuItem>
+          <MenuItem value={'secretaire'}>secretaire</MenuItem>
+          <MenuItem value={'comptable'}>comptable</MenuItem>
+        </Select>
+      </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type='submit'> {up === false ? 'add' : ' Update' } </Button>
+        </DialogActions>
+        </form>
+      </Dialog>
+
+      
+
+
+
+
+
+
+
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             User
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+
+      
+          {
+            access.C &&  <Button onClick={handleClickOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
           </Button>
+          }
+         
         </Stack>
+
+        <Box sx={{ width: '100%' }}>
+      <Collapse in={open3}>
+        <Alert
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen3(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+          sx={{ mb: 2 }}
+        >
+          {textAlert}
+        </Alert>
+      </Collapse>
+    </Box>
 
         <Card>
           <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
@@ -220,7 +664,7 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, prenom ,name, role, status, company, avatarUrl, phone } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -233,26 +677,35 @@ export default function UserPage() {
                           <Stack direction="row" alignItems="center" spacing={2}>
                             <Avatar alt={name} src={avatarUrl} />
                             <Typography variant="subtitle2" noWrap>
-                              {name}
+                              {name + ' ' + prenom }
                             </Typography>
                           </Stack>
                         </TableCell>
 
                         <TableCell align="left">{company}</TableCell>
 
+                        <TableCell align="left">{phone }</TableCell>
+
                         <TableCell align="left">{role}</TableCell>
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                       
 
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
-                        <TableCell align="right">
-                          <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
-                            <Iconify icon={'eva:more-vertical-fill'} />
-                          </IconButton>
-                        </TableCell>
+                        {
+                          access.DU  &&
+                          <TableCell align="right">
+                       <IconButton size="large" color="inherit" onClick={(event)=> handleOpenMenu(event,id)}>
+                         <Iconify icon={'eva:more-vertical-fill'} />
+                       </IconButton>
+                     </TableCell>
+                        }
+
+                        
+                        
+                      
                       </TableRow>
                     );
                   })}
@@ -319,17 +772,27 @@ export default function UserPage() {
             },
           },
         }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Edit
-        </MenuItem>
+      > 
 
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+      {
+        access.U &&  <MenuItem onClick={handelUpdate}>
+        <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+        Edit
+      </MenuItem>
+      }
+
+{
+        access.D &&   <MenuItem onClick={handelDelete} sx={{ color: 'error.main' }}>
+        <Iconify  icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+        Delete
+      </MenuItem>
+      }
+       
+
+      
       </Popover>
+
+   
     </>
   );
 }

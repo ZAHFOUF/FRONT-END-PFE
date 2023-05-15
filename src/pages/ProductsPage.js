@@ -1,16 +1,21 @@
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 // @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container , Box , CircularProgress , Stack, Typography } from '@mui/material';
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
 import PRODUCTS from '../_mock/products';
+import { actionsOrganismes } from '../store/index';
+import axios from '../api/axios'
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
+  const [open1, setOpen1] = useState('flex');
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -19,6 +24,26 @@ export default function ProductsPage() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
+  const organismes = useSelector((state)=>{
+    return state.organismes
+})
+
+const dispatch = useDispatch()
+
+
+
+
+/* ----------------------------------- axios load  ---------------------------------------------- */
+
+useEffect(()=>{
+
+  axios.get("/api/organisations").then((e)=>{
+      setOpen1('none')
+      dispatch(actionsOrganismes.loadOrganismes(e.data.organisations))
+  })
+
+},[dispatch])
 
   
 
@@ -32,7 +57,7 @@ export default function ProductsPage() {
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+        Organismes
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
@@ -46,7 +71,12 @@ export default function ProductsPage() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+
+        <Box sx={{display: open1, justifyContent: 'center', padding: '22px' }}>
+      <CircularProgress />
+    </Box>
+
+        <ProductList products={organismes} />
         <ProductCartWidget />
       </Container>
     </>

@@ -1,0 +1,43 @@
+.select{
+    margin-top: 26px !important;
+    width: 90% !important;
+}
+
+.op1{
+    position: absolute;
+    right: -5%;
+    top: -1%;
+}
+
+.react-tel-input .form-control { 
+
+    height: 40px !important;
+
+
+}
+
+.con1{
+    display: grid;
+    place-items: center;
+    height: 100%;
+}
+.con1 p{
+    margin-top: -10px;
+}
+
+.con1 div.MuiFormControl-root {
+    margin-top: 10px;
+}
+
+
+.con2{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.labelPhoto{
+    display: flex;
+    justify-content: center;
+    margin: 1px;
+}

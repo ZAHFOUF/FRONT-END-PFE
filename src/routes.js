@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 /* eslint-disable prefer-template */
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
@@ -12,6 +13,10 @@ import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { respo } from './_mock/user';
+import Projects from './pages/ProjectsPage';
+import ProjectSearch from './pages/ProductSearch';
+
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -19,28 +24,53 @@ export default function Router() {
 
   const paths = [
     
-    { path: 'dashboard', element: <DashboardAppPage /> },
-    { path: 'user', element: <UserPage /> },
-    { path: 'projects', element: <ProductsPage /> },
-    { path: 'blog', element: <BlogPage /> },
+    { path: 'dashboard', element: <DashboardAppPage access={0}/> },
+    { path: 'user', element: <UserPage  access={0} /> },
+    { path: 'organismes', element: <ProductsPage access={0}/> },
+    { path: 'blog', element: <BlogPage access={0}/> },
+    { path: 'projects', element: <Projects access={0} /> },
   ]
 
   const pathConfig = []
 
+  // eslint-disable-next-line consistent-return
   respo().map((e1,n)=>{
     // eslint-disable-next-line no-var
-    var item = paths.filter((e)=> e.path === e1)
+    var item = paths.filter((e)=> e.path === e1.reccord)
     if (n === 0) {
       const path = '/' + item[0].path
       pathConfig.push({  element: <Navigate to={path} />, index: true })
       pathConfig.push(item[0])
-    }else{
+    }else if (item[0]){
+ 
+      if (item[0].path ===  'dashboard') {
+        item[0].element = <DashboardAppPage access={e1.access}/>
+      }else if (item[0].path ===  'user' ){
+        item[0].element = <UserPage  access={e1.access}/>
+      }else if (item[0].path ===  'organismes' ){
+        item[0].element = <ProductsPage  access={e1.access}/>
+      }else if (item[0].path ===  'blog' ){
+        item[0].element = <BlogPage  access={e1.access}/>
+      }else if (item[0].path ===  'projects' ){
+        item[0].element = <Projects  access={e1.access}/>
+        pathConfig.push({path: 'projects/search', element: <ProjectSearch access={e1.access} />})
+      }
       pathConfig.push(item[0])
 
-    }
-    return 0
+
   
- }) 
+    }
+
+    return 0
+
+  
+  
+  
+  
+  })
+
+  
+
 
 
 

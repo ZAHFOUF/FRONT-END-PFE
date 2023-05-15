@@ -1,6 +1,6 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery/useMediaQuery';
 
 // ----------------------------------------------------------------------
 

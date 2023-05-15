@@ -66,6 +66,8 @@ export default function AccountPopover({user}) {
     
   }
 
+  console.log(user.icon);
+
   return (
     <>
       <IconButton

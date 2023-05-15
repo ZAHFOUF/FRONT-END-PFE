@@ -1,9 +1,30 @@
+/* eslint-disable prefer-template */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable prefer-const */
 import { useEffect, useState } from 'react';
+import { useDispatch  } from 'react-redux'
 import { Outlet , useNavigate  } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
+
+
+
 import { AES, enc } from 'crypto-js';
 
 // @mui
 import { styled } from '@mui/material/styles';
+
+import { faker } from '@faker-js/faker';
+
+import { sample } from 'lodash';
+
+import Iconify from '../../components/iconify';
+
+
+
+
+import { actionsUsers } from '../../store'
+
 
 import { useContextProvider } from '../../context/contextProvider';
 
@@ -15,6 +36,12 @@ import Nav from './nav';
 
 import SvgColor from '../../components/svg-color';
 import { respo } from '../../_mock/user'
+
+import axios from '../../api/axios';
+
+
+
+
 // ----------------------------------------------------------------------
 
 
@@ -62,7 +89,7 @@ export default function DashboardLayout() {
     if (    token === 0 ) {
         navigate("/login")
     }
-  })
+  },[])
 
   /* ----------------------- config of nav ------------------------------------ */
 
@@ -82,9 +109,9 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'projects',
-    path: '/projects',
-    icon: icon('ic_cart'),
+    title: 'organismes',
+    path: '/organismes',
+    icon: <BusinessOutlinedIcon color="action" />,
   },
   {
     title: 'blog',
@@ -101,23 +128,27 @@ const navConfig = [
     path: '/404',
     icon: icon('ic_disabled'),
   },
+  {
+    title: 'projects',
+    path: '/projects',
+    icon: <Iconify icon='grommet-icons:projects' color='#637381' /> ,
+  }
 ];
 
 
 respo().map((e1)=>{
    // eslint-disable-next-line no-var
-   var item = navConfig.filter((e)=> e.title === e1)
-   navConfigFilter.push(item[0])
+   var item = navConfig.filter((e)=> e.title === e1.reccord)
+   if (item[0]) {
+    navConfigFilter.push(item[0])
+   }
+  
    return 0
  
 }) 
 
 /* -------------- end of confug ------------------- */
 
-const photos ={
-  admin:'/assets/images/avatars/avatar_12.jpg',
-  directeur:'/assets/images/avatars/avatar_19.jpg'
-}
 
 
 
@@ -127,8 +158,35 @@ if (localStorage.getItem("user_session")) {
   const key = JSON.parse(localStorage.getItem("user_session"))
   const hash = AES.decrypt(key.user.role,"younes")
 const role = hash.toString(enc.Utf8)
-user.icon =  photos[role]
+user.icon =  key.user.icon
 }
+
+/* ------------------------------------ axios  ------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+/* ------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
