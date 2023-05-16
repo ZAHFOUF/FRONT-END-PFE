@@ -1,5 +1,7 @@
+/* eslint-disable import/order */
 import React,{ useState } from 'react';
 import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -7,9 +9,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import Typography from '@mui/material/Typography';
-import { Avatar , TableCell , IconButton , MenuItem ,Popover , Grow } from '@mui/material';
+import { Avatar , AvatarGroup , TableCell , IconButton , MenuItem ,Popover , Grow, Badge, Stack } from '@mui/material';
 import Iconify from '../iconify/Iconify'
 import '../../theme/css/index.css'
+import { ProgressBar } from '../progress/index';
+
 
 const bull = (
   <Box
@@ -33,7 +37,36 @@ export default function Projectcart(props) {
     setOpen(null);
   };
 
+  const classDesign = props.project.status === 'Can' ? 'can_case' : 'normal_case'
 
+  const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      backgroundColor: '#44b700',
+      color: '#44b700',
+      boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+      '&::after': {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+        animation: 'ripple 1.2s infinite ease-in-out',
+        border: '1px solid currentColor',
+        content: '""',
+      },
+    },
+    '@keyframes ripple': {
+      '0%': {
+        transform: 'scale(.8)',
+        opacity: 1,
+      },
+      '100%': {
+        transform: 'scale(2.4)',
+        opacity: 0,
+      },
+    },
+  }));
 
 
 
@@ -42,7 +75,7 @@ export default function Projectcart(props) {
     <Grow in={Boolean(true)}> 
 
 
-<Card sx={{ minWidth: 275 , position:'relative' }} >
+<Card sx={{ minWidth: 275 , position:'relative' }} className={classDesign} >
       <CardContent >
 
 
@@ -107,16 +140,40 @@ export default function Projectcart(props) {
         <Typography pt={1} style={{display:'flex',alignItems:'center'}} variant="body3">
         <Avatar sx={{ bgcolor: 'rgb(76, 175, 80)' ,width:'35px' , height:'35px'}}><AccountBalanceIcon sx={{fontSize:'1.3rem'}}/> </Avatar>  <p style={{paddingLeft:'7px'}}>  {props.project.budget} </p>
         </Typography>
+
+        <ProgressBar color={'#2ecc71'}  value={props.project.progress} />
      
       </CardContent>
-      <CardActions  sx={{marginLeft:'11px' , paddingTop:'5px' , paddingBottom:'20px'}}>
+      <Stack padding={'10px'} justifyContent={'space-between'}  spacing={4}  direction={'row'}>
+
+      <CardActions  sx={{  paddingTop:'5px' , paddingBottom:'20px'}}>
        <Link to={`/projects/search?q=${props.project.id}`}>  <Button size="small">  Learn More</Button> </Link>
       </CardActions>
+
+      <AvatarGroup max={1}>
+      <Avatar alt="Remy Sharp" src={props.project.chef.icon} />
+  <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+  <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+  <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+  <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+</AvatarGroup>
+     
+     
+       
+    
+
+      </Stack>
+     
+      
 
      
     </Card>
 
     </Grow>
+
+
+
+
   
   );
 }
