@@ -13,6 +13,12 @@ import { Avatar , AvatarGroup , TableCell , IconButton , MenuItem ,Popover , Gro
 import Iconify from '../iconify/Iconify'
 import '../../theme/css/index.css'
 import { ProgressBar } from '../progress/index';
+import DialogDelete from '../dialog-delete';
+import { useDispatch } from 'react-redux';
+import { actionsProjects } from '../../store';
+import { Toast } from '../aleart';
+
+
 
 
 const bull = (
@@ -27,6 +33,8 @@ const bull = (
 
 export default function Projectcart(props) {
   const [open, setOpen] = useState(null);
+  const [open2, setOpen2] = useState(false);
+  const dispatch = useDispatch()
 
 
   const handleOpenMenu = (event,id) => {
@@ -37,7 +45,36 @@ export default function Projectcart(props) {
     setOpen(null);
   };
 
+  const handelEdit = (e)=> {
+      props.setProject(props.project)
+      props.setEdit()
+
+
+  }
+
+  const handelRemove = (i)=> {
+    console.log(i);
+    
+
+    dispatch(actionsProjects.removeProjects({id:i}))
+
+    setOpen2(false)
+
+    Toast.fire({icon:"info" , title:"Project Deleted !"})
+    
+
+
+}
+
+  const handelDelete = ()=>{
+    setOpen(null)
+
+    setOpen2(true)
+
+  }
+
   const classDesign = props.project.status === 'Can' ? 'can_case' : 'normal_case'
+
 
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -72,7 +109,10 @@ export default function Projectcart(props) {
 
 
   return (
-    <Grow in={Boolean(true)}> 
+    <>
+        <DialogDelete res={'Project'} open={open2} setOpen={setOpen2} handelDelete={()=> handelRemove(props.project.id)} />
+
+        <Grow in={Boolean(true)}> 
 
 
 <Card sx={{ minWidth: 275 , position:'relative' }} className={classDesign} >
@@ -111,16 +151,20 @@ export default function Projectcart(props) {
         pin
       </MenuItem>
 
-     <MenuItem >
+     <MenuItem  onClick={handelEdit}>
         <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
         Edit
       </MenuItem>
      
 
-  <MenuItem  sx={{ color: 'error.main' }}>
-        <Iconify  icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-        Delete
-      </MenuItem>
+     {
+       props.access.D && <MenuItem onClick={()=> handelDelete(props.project.id)}  sx={{ color: 'error.main' }}>
+       <Iconify  icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
+       Delete
+     </MenuItem>
+     }
+
+  
        
 
       
@@ -136,7 +180,7 @@ export default function Projectcart(props) {
         <Typography pt={1} variant="body2">
           {props.project.des.slice(0,90)} ...
         </Typography>
-        <img width={100} style={{marginTop:'15px'}} src={props.project.org} alt='org' loading='lazy' />
+        <img width={100} style={{marginTop:'15px'}} src={props.project.org.cover} alt='org' loading='lazy' />
         <Typography pt={1} style={{display:'flex',alignItems:'center'}} variant="body3">
         <Avatar sx={{ bgcolor: 'rgb(76, 175, 80)' ,width:'35px' , height:'35px'}}><AccountBalanceIcon sx={{fontSize:'1.3rem'}}/> </Avatar>  <p style={{paddingLeft:'7px'}}>  {props.project.budget} </p>
         </Typography>
@@ -169,7 +213,13 @@ export default function Projectcart(props) {
      
     </Card>
 
+
     </Grow>
+
+    
+    
+    </>
+   
 
 
 

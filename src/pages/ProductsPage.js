@@ -78,6 +78,7 @@ useEffect(()=>{
   axios.get("/api/organisations").then((e)=>{
       setOpen1('none')
       globalData = e.data.organisations
+      console.log(e.data.organisations);
       const data = generateItems(e.data.organisations)
 
       

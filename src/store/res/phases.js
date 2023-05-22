@@ -13,7 +13,7 @@ const phases = createSlice({
     ,
     removePhases (phases,action) {
 
-         const filter = phases.filter((e)=> e.id !== action.payload.id)
+         const filter = phases.filter((e)=> e.code !== action.payload.id)
         
 
          return [...filter]

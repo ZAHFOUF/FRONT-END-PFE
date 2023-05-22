@@ -602,6 +602,7 @@ let users = []
         <InputLabel id="demo-simple-select-autowidth-label"> Roles </InputLabel>
         <Select
         required
+      
           labelId="demo-simple-select-autowidth-label"
           id="demo-simple-select-autowidth"
           value={age}
@@ -719,8 +720,8 @@ let users = []
 
                         {
                           access.DU  &&
-                          <TableCell align="right">
-                       <IconButton size="large" color="inherit" onClick={(event)=> handleOpenMenu(event,id)}>
+                          <TableCell align="right" >
+                       <IconButton size="large" color="inherit" onClick={(event)=> handleOpenMenu(event,id)} >
                          <Iconify icon={'eva:more-vertical-fill'} />
                        </IconButton>
                      </TableCell>

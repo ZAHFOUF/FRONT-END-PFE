@@ -132,6 +132,11 @@ const navConfig = [
     title: 'projects',
     path: '/projects',
     icon: <Iconify icon='grommet-icons:projects' color='#637381' /> ,
+  },
+  {
+    title: 'phases',
+    path: '/phases',
+    icon: <Iconify icon='gis:step' color='#637381' /> ,
   }
 ];
 

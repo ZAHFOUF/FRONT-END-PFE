@@ -15,6 +15,8 @@ import DashboardAppPage from './pages/DashboardAppPage';
 import { respo } from './_mock/user';
 import Projects from './pages/ProjectsPage';
 import ProjectSearch from './pages/ProductSearch';
+import PhasesPage from './pages/PhasesPage';
+
 
 
 // ----------------------------------------------------------------------
@@ -29,6 +31,7 @@ export default function Router() {
     { path: 'organismes', element: <ProductsPage access={0}/> },
     { path: 'blog', element: <BlogPage access={0}/> },
     { path: 'projects', element: <Projects access={0} /> },
+    { path: 'phases', element: <PhasesPage access={0} /> },
   ]
 
   const pathConfig = []
@@ -54,6 +57,9 @@ export default function Router() {
       }else if (item[0].path ===  'projects' ){
         item[0].element = <Projects  access={e1.access}/>
         pathConfig.push({path: 'projects/search', element: <ProjectSearch access={e1.access} />})
+      }else if (item[0].path ===  'phases' ){
+        item[0].element = <PhasesPage  access={e1.access}/>
+        pathConfig.push({path: 'phases', element: <PhasesPage access={e1.access} />})
       }
       pathConfig.push(item[0])
 

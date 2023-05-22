@@ -61,6 +61,10 @@ const WARNING = {
   contrastText: GREY[800],
 };
 
+const BLUE = {
+   0:'#1e90ff'
+};
+
 const ERROR = {
   lighter: '#FFE7D9',
   light: '#FFA48D',
@@ -84,6 +88,7 @@ const palette = {
     primary: GREY[800],
     secondary: GREY[600],
     disabled: GREY[500],
+    blue:BLUE[0]
   },
   background: {
     paper: '#fff',

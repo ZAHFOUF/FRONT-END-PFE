@@ -5,6 +5,7 @@ import { Card, Typography , CardContent , Avatar  , Grid , Container   } from '@
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { ProgressBar } from '../components/progress/index';
 import Iconify from '../components/iconify';
+import Phases from '../components/phases-panel';
 
 
 
@@ -63,7 +64,7 @@ export default function ProjectSearch(props) {
         <Typography pt={1} variant="body2">
           {project.des}
         </Typography>
-        <img width={100} style={{marginTop:'15px'}} src={project.org} alt='org' loading='lazy' />
+        <img width={100} style={{marginTop:'15px'}} src={project.org.cover} alt='org' loading='lazy' />
         <Typography pt={1} style={{display:'flex',alignItems:'center'}} variant="body3">
         <Avatar sx={{ bgcolor: 'rgb(76, 175, 80)' ,width:'35px' , height:'35px'}}><AccountBalanceIcon sx={{fontSize:'1.3rem'}}/> </Avatar>  <p style={{paddingLeft:'7px'}}>  {project.budget} </p>
         </Typography>
@@ -104,32 +105,16 @@ export default function ProjectSearch(props) {
 
   </Grid>
 
-        <hr style={{ marginTop:'30px'}} className='style-one' />
+       
 
 
-        <Typography variant="h4" sx={{marginBottom: '13px',  marginLeft: '15px' , marginTop:'30px'}} component="div">
+        <Typography variant="h4" sx={{marginBottom: '13px',  marginLeft: '15px' , marginTop:'40px'}} component="div">
           Phases Of The Project
         </Typography>
 
+              
 
-        <Grid container padding={'10px'} spacing={2}>
-        <Grid item xs={12} md={8} lg={6}>
-        <div draggable style={{background:"#000", padding:'30px' , color:"#FFF" , cursor:'grab'}}>
-              <p>H1</p>
-    </div>
-        </Grid>
-
-
-        <Grid item xs={12} md={8} lg={6}>
-
-        <div draggable style={{background:"#FFF" , padding:'30px' , color:"#000"  , cursor:'grab'}}>
-    <p>H2</p>
-    </div>
-
-    </Grid>
-
-
-        </Grid>
+          <Phases access={props.access.phases} />
     
 
 

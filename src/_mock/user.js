@@ -45,11 +45,11 @@ import axios from '../api/axios';
 
 const roles ={
   all:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} }, {reccord:'projects',access:{C:true,R:true,U:true,D:true}} , {reccord:'employees',access:{C:true,R:true,U:true,D:true} } , {reccord:'blog',access:{C:true,R:true,U:true,D:true} }],
-  admin:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} } , {reccord:'employees',access:{C:true,R:true,U:true,D:true,DU:true} },{reccord:'projects',access:{C:true,R:true,U:true,D:true}}],
-  directeur: [{reccord:'organismes',access:{C:true,R:true,U:true,D:true} },{reccord:'blog',access:{C:true,R:true,U:true,D:true} },{reccord:'employees',access:{C:false,R:true,U:false,D:false,DU:false} }] ,
+  admin:[{reccord:'dashboard',access:{C:true,R:true,U:true,D:true} } , {reccord:'employees',access:{C:true,R:true,U:true,D:true,DU:true} } ,{reccord:'projects',access:{C:true,R:true,U:true,D:true,phases:{C:true,R:true,DU:true}}} ,  {reccord:'blog',access:{C:true,R:true,U:true,D:true} } ],
+  directeur: [{reccord:'organismes',access:{C:true,R:true,U:true,D:true} },{reccord:'blog',access:{C:true,R:true,U:true,D:true} },{reccord:'employees',access:{C:false,R:true,U:false,D:false,DU:false} } , {reccord:'projects',access:{C:false,R:true,U:true,D:true,DU:true,phases:{C:false,R:true,DU:false}}}] ,
   comptable:[{reccord:'blog',access:{C:true,R:true,U:true,D:true} }] ,
-  secretaire:[{reccord:'organismes',access:{C:true,R:true,U:true,D:true} }] ,
-  chef_projet:[{reccord:'employees',access:{C:false,R:true,U:false,D:false,DU:false} } , {reccord:'projects',access:{C:true,R:true,U:true,D:true}} ] 
+  secretaire:[{reccord:'organismes',access:{C:true,R:true,U:true,D:true} } , {reccord:'projects',access:{C:true,R:true,U:true,D:false,DU:false,phases:{C:false,R:true,DU:false}}}] ,
+  chef_projet:[{reccord:'projects',access:{C:true,R:true,U:true,D:true}} ,{reccord: 'phases' , access:{C:true,R:true,DU:true} } ] 
 
 } 
    
@@ -76,7 +76,7 @@ export function respo () {
   
 }
 
-export const settings = {OTP:false}
+export const settings = {OTP:false , adblock : false}
 
  
 
