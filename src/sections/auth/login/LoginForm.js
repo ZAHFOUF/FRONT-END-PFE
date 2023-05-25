@@ -37,6 +37,8 @@ var userName = ''
 
  var ic = ''
 
+ var idd = 0
+
 
  var session = {st:token,user:{name:userName,email:userEmail,role:UserRole,icon:ic}}
 
@@ -94,12 +96,13 @@ axios.post("/api/login",{email:e,password:p}).then((e)=>{
     phone = e.data.user.phone_number
 
     ic = e.data.user.photo
+    idd = e.data.user.id
 
    
   
 
 
-  session = {st:AES.encrypt(e.data.token,"younes").toString(),user:{icon:ic,name:AES.encrypt(e.data.user.nom,"younes").toString(),email:AES.encrypt(e.data.user.email,"younes").toString(),role:AES.encrypt(e.data.user.role[0].name,"younes").toString()}}
+  session = {st:AES.encrypt(e.data.token,"younes").toString(),user:{id:idd,icon:ic,name:AES.encrypt(e.data.user.nom,"younes").toString(),email:AES.encrypt(e.data.user.email,"younes").toString(),role:AES.encrypt(e.data.user.role[0].name,"younes").toString()}}
 
    
   if (settings.OTP === true) {
@@ -111,7 +114,7 @@ axios.post("/api/login",{email:e,password:p}).then((e)=>{
   }else{
     window.localStorage.setItem("user_session",JSON.stringify(session))
     _setToken(token)
-    setUser({name:userName,email:userEmail,role:UserRole,icon:ic})
+    setUser({name:userName,email:userEmail,role:UserRole,icon:ic,id:idd})
     navigate("/")
   }
   
@@ -157,7 +160,7 @@ axios.post("/api/login",{email:e,password:p}).then((e)=>{
       .then(async (res) => {
         window.localStorage.setItem("user_session",JSON.stringify(session))
         _setToken(token)
-        setUser({name:userName,email:userEmail,role:UserRole,icon:ic})
+        setUser({name:userName,email:userEmail,role:UserRole,icon:ic,id:idd})
         navigate("/")
       
       })

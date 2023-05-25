@@ -37,6 +37,8 @@ import { settings } from './_mock/user';
 
 export default function App() {
   const adBlockDetected = useDetectAdBlock();
+  console.log("%c\n\n███╗   ███╗ ██╗   ██╗ ██████╗\n████╗ ████║ ██║   ██║   ██╔═╝\n██╔████╔██║ ██║   ██║   ██║\n██║╚██╔╝██║ ██║   ██║   ██║\n██║ ╚═╝ ██║ ╚██████╔╝ ██████╗\n╚═╝     ╚═╝  ╚═════╝  ╚═════╝\n\nTip: BY YOUNES ZAHFOUF AFTER THIS MAKE SHURE HIRE ME !.\n", "font-family:monospace;color:#1976d2;font-size:12px;")
+
 
   if (adBlockDetected && settings.adblock ) {
 

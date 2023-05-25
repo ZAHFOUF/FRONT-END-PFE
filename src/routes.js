@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable array-callback-return */
 /* eslint-disable prefer-template */
+import React from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DashboardLayout from './layouts/dashboard';
@@ -13,9 +15,9 @@ import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 import { respo } from './_mock/user';
-import Projects from './pages/ProjectsPage';
 import ProjectSearch from './pages/ProductSearch';
 import PhasesPage from './pages/PhasesPage';
+import LabTabs from './pages/ProjectsPage';
 
 
 
@@ -26,12 +28,13 @@ export default function Router() {
 
   const paths = [
     
-    { path: 'dashboard', element: <DashboardAppPage access={0}/> },
-    { path: 'employees', element: <UserPage  access={0} /> },
-    { path: 'organismes', element: <ProductsPage access={0}/> },
-    { path: 'blog', element: <BlogPage access={0}/> },
-    { path: 'projects', element: <Projects access={0} /> },
-    { path: 'phases', element: <PhasesPage access={0} /> },
+    { path: 'dashboard', element: <DashboardAppPage /> },
+    { path: 'employees', element: <UserPage   /> },
+    { path: 'organismes', element: <ProductsPage /> },
+    { path: 'blog', element: <BlogPage /> },
+    { path: 'projects', element: <LabTabs  /> },
+
+    { path: 'phases', element: <PhasesPage /> },
   ]
 
   const pathConfig = []
@@ -42,30 +45,25 @@ export default function Router() {
     var item = paths.filter((e)=> e.path === e1.reccord)
     if (n === 0) {
       const path = '/' + item[0].path
-      pathConfig.push({  element: <Navigate to={path} />, index: true })
+      pathConfig.push({  element: <Navigate to={path}  />,  index: true })
+      const updatedElement = React.cloneElement(item[0].element, { access: e1.access });
+      item[0].element = updatedElement;
+      item[0].path === 'projects' ? pathConfig.push({path: 'projects/search', element: <ProjectSearch access={e1.access} />}) : null
       pathConfig.push(item[0])
-    }else if (item[0]){
- 
-      if (item[0].path ===  'dashboard') {
-        item[0].element = <DashboardAppPage access={e1.access}/>
-      }else if (item[0].path ===  'employees' ){
-        item[0].element = <UserPage  access={e1.access}/>
-      }else if (item[0].path ===  'organismes' ){
-        item[0].element = <ProductsPage  access={e1.access}/>
-      }else if (item[0].path ===  'blog' ){
-        item[0].element = <BlogPage  access={e1.access}/>
-      }else if (item[0].path ===  'projects' ){
-        item[0].element = <Projects  access={e1.access}/>
-        pathConfig.push({path: 'projects/search', element: <ProjectSearch access={e1.access} />})
-      }else if (item[0].path ===  'phases' ){
-        item[0].element = <PhasesPage  access={e1.access}/>
-        pathConfig.push({path: 'phases', element: <PhasesPage access={e1.access} />})
-      }
-      pathConfig.push(item[0])
-
-
+    }else  if (item[0]) {
+      const updatedElement = React.cloneElement(item[0].element, { access: e1.access });
+      item[0].element = updatedElement;
+      item[0].path === 'projects' ? pathConfig.push({path: 'projects/search', element: <ProjectSearch access={e1.access} />}) : null
   
+      // Add the updated item to pathConfig
+      pathConfig.push(item[0]);
     }
+
+    console.log(pathConfig);
+    
+    
+
+   
 
     return 0
 
@@ -112,8 +110,11 @@ export default function Router() {
     },
   ]);
 
+  console.log(routes);
+
   return routes;
 }
+
 /*  // eslint-disable-next-line vars-on-top
        console.log("ok");
        var tk = AES.decrypt(session.st) 

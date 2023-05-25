@@ -1215,17 +1215,17 @@
   "resolved" "https://registry.npmjs.org/@emotion/hash/-/hash-0.9.0.tgz"
   "version" "0.9.0"
 
-"@emotion/is-prop-valid@^1.2.0":
-  "integrity" "sha512-3aDpDprjM0AwaxGE09bOPkNxHpBd+kA6jty3RnaEXdweX1DF1U3VQpPYb0g1IStAuK7SVQ1cy+bNBBKp4W3Fjg=="
-  "resolved" "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-1.2.0.tgz"
-  "version" "1.2.0"
+"@emotion/is-prop-valid@^1.2.0", "@emotion/is-prop-valid@^1.2.1":
+  "integrity" "sha512-61Mf7Ufx4aDxx1xlDeOm8aFFigGHE4z+0sKCa+IHCeZKiyP9RLD0Mmx7m8b9/Cf37f7NAvQOOJAbQQGVr5uERw=="
+  "resolved" "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-1.2.1.tgz"
+  "version" "1.2.1"
   dependencies:
-    "@emotion/memoize" "^0.8.0"
+    "@emotion/memoize" "^0.8.1"
 
-"@emotion/memoize@^0.8.0":
-  "integrity" "sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA=="
-  "resolved" "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.8.0.tgz"
-  "version" "0.8.0"
+"@emotion/memoize@^0.8.0", "@emotion/memoize@^0.8.1":
+  "integrity" "sha512-W2P2c/VRW1/1tLox0mVUalvnWXxavmv/Oum2aPsRcoDJuob75FC3Y8FbpfLwUegRcxINtGUMPq0tFCvYNTBXNA=="
+  "resolved" "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.8.1.tgz"
+  "version" "0.8.1"
 
 "@emotion/react@^11.0.0-rc.0", "@emotion/react@^11.10.6", "@emotion/react@^11.4.1", "@emotion/react@^11.5.0", "@emotion/react@^11.9.0":
   "integrity" "sha512-6HT8jBmcSkfzO7mc+N1L9uwvOnlcGoix8Zn7srt+9ga0MjREo6lRpuVX0kzo6Jp6oTqDhREOFsygN6Ew4fEQbw=="
@@ -2030,7 +2030,21 @@
   "resolved" "https://registry.npmjs.org/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz"
   "version" "2.0.4"
 
-"@mui/base@^5.0.0-alpha.87", "@mui/base@5.0.0-alpha.101":
+"@mui/base@^5.0.0-alpha.87":
+  "integrity" "sha512-R9R+aqrl1QhZJaO05rhvooqxOaf7SKpQ+EjW80sbP3ticTVmLmrn4YBLQS7/ML+WXdrkrPtqSmKFdSE5Ik3gBQ=="
+  "resolved" "https://registry.npmjs.org/@mui/base/-/base-5.0.0-beta.2.tgz"
+  "version" "5.0.0-beta.2"
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    "@emotion/is-prop-valid" "^1.2.1"
+    "@mui/types" "^7.2.4"
+    "@mui/utils" "^5.13.1"
+    "@popperjs/core" "^2.11.7"
+    "clsx" "^1.2.1"
+    "prop-types" "^15.8.1"
+    "react-is" "^18.2.0"
+
+"@mui/base@5.0.0-alpha.101":
   "integrity" "sha512-a54BcXvArGOKUZ2zyS/7B9GNhAGgfomEQSkfEZ88Nc9jKvXA+Mppenfz5o4JCAnD8c4VlePmz9rKOYvvum1bZw=="
   "resolved" "https://registry.npmjs.org/@mui/base/-/base-5.0.0-alpha.101.tgz"
   "version" "5.0.0-alpha.101"
@@ -2140,7 +2154,7 @@
   "resolved" "https://registry.npmjs.org/@mui/types/-/types-7.2.4.tgz"
   "version" "7.2.4"
 
-"@mui/utils@^5.10.9", "@mui/utils@^5.12.0", "@mui/utils@^5.12.3":
+"@mui/utils@^5.10.9", "@mui/utils@^5.12.0", "@mui/utils@^5.12.3", "@mui/utils@^5.13.1":
   "integrity" "sha512-6lXdWwmlUbEU2jUI8blw38Kt+3ly7xkmV9ljzY4Q20WhsJMWiNry9CX8M+TaP/HbtuyR8XKsdMgQW7h7MM3n3A=="
   "resolved" "https://registry.npmjs.org/@mui/utils/-/utils-5.13.1.tgz"
   "version" "5.13.1"

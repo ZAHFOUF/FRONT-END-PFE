@@ -1,29 +1,115 @@
+/* eslint-disable no-var */
+/* eslint-disable prefer-template */
+/* eslint-disable import/no-unresolved */
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-constant-condition */
-import { Grid, Typography , MenuItem , Divider , Box ,Stack , Popover , TableContainer , Table , TableHead , TableRow , TableCell ,TableBody , Paper, AvatarGroup, Avatar, Button, IconButton, Fab, DialogContent, DialogTitle, Dialog } from '@mui/material';
-import React, { useState } from 'react';
+
+import { deletePhase, editPhaseField, loadPhases } from 'src/store/res/phases';
+import { Grid, Typography , MenuItem , Divider , Box ,Stack , Popover , TableContainer , Table , TableHead , TableRow , TableCell ,TableBody , Paper, AvatarGroup, Avatar, Button, IconButton, Fab, DialogContent, DialogTitle, Dialog, FormControl, TextField } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
+import { useForm } from 'react-hook-form';
+import { faker } from '@faker-js/faker';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import DialogActions from '@mui/material/DialogActions';
+import CloseIcon from '@mui/icons-material/Close';
 import Iconify from '../iconify/Iconify';
 import DialogCreate from '../dailog-create';
 import { FormCreatePhase } from '../form-create-phase';
 import DialogDelete from '../dialog-delete';
-import { actionsPhases } from '../../store';
+import { actionsDeliverables, actionsPhases } from '../../store';
 import { Toast } from '../aleart';
+
+
+import {
+  AppTasks,
+  AppNewsUpdate,
+  AppOrderTimeline,
+  AppCurrentVisits,
+  AppWebsiteVisits,
+  AppTrafficBySite,
+  AppWidgetSummary,
+  AppCurrentSubject,
+  AppConversionRates,
+} from '../../sections/@dashboard/app';
+import { addDel } from '../../store/res/deliverables';
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(3),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(10),
+  },
+}));
+
+function BootstrapDialogTitle(props) {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
 
 
 
 export default function Phases ({ project , access }) {
+  const dispatch = useDispatch()
+  const { register, handleSubmit } = useForm();
+
+  
 
     const phases = useSelector((state)=> state.phases)
+    const deliverables = useSelector((state)=> state.deliverables)
+
+    const extractDeliverables = (phases) => {
+      return _.flatMap(phases, (phase) => {
+        // eslint-disable-next-line arrow-body-style
+        return _.map(phase.deliverables, (deliverable) => {
+          return {
+            phase: phase.code,
+            ...deliverable,
+          };
+        });
+      });
+    };
+
+    
     const [open,setOpen] = useState(null)
     const [team,setTeam] = useState([])
     const [phasePoint,setPhasePoint] = useState()
+    const [type,setType] = useState(false)
     const [phase,setPhase] = useState()
     const [status,setStatus] = useState()
     const [open1,setOpen1] = useState(false)
     const [open2,setOpen2] = useState(false)
     const [open3,setOpen3] = useState(false)
-    const [type,setType] = useState(false)
-    const dispatch = useDispatch()
+    const [open4,setOpen4] = useState(false)
+    const [del,setDel] = useState([])
+   
     
     
 
@@ -50,19 +136,26 @@ export default function Phases ({ project , access }) {
         setOpen(null)
     }
 
+    const handelModel = ()=>{
+       setOpen4(false)
+    }
+
+    
+
    
 
    
 
     const showteam = (event,team)=>{
+      console.log(team);
         setTeam(team)
-        setOpen(event.currentTarget)
+       setOpen(event.currentTarget)
 
     }
 
 
     const handleOpenMenu = (event,phase) => {
-        console.log(status);
+        console.log(phase);
         setOpen1(event.target)
         setPhasePoint(phase.code)
         setStatus(phase.status)
@@ -75,14 +168,18 @@ export default function Phases ({ project , access }) {
       };
 
       const handelRemove = (i)=> {
+
+        console.log(i);
        
         
+
+        deletePhase((e)=>{ dispatch(actionsPhases.removePhases({id:i})) ; setOpen3(false) ;  Toast.fire({icon:"info" , title:"Phase Deleted !"})},(e)=>{Toast.fire({icon:"error" , title:"Error In the server !"})},i)
     
-        dispatch(actionsPhases.removePhases({id:i}))
+       
     
-        setOpen3(true)
+       
     
-        Toast.fire({icon:"info" , title:"Phase Deleted !"})
+       
         
     
     
@@ -93,6 +190,11 @@ export default function Phases ({ project , access }) {
         setOpen3(true)
     }
 
+    const handelClick4 = ()=>{
+      
+      setOpen4(true)
+  }
+
   
 
       const fabStyle = {
@@ -101,6 +203,33 @@ export default function Phases ({ project , access }) {
         right: 40,
       };
 
+      const  handelStatus = (st) =>{
+          var ph = {...phase , status:st}
+
+          editPhaseField((e)=>{dispatch(actionsPhases.upPhasess({data:ph})) ; setOpen1(null) ; Toast.fire({icon:st !== 'Done' ? "info" : 'success' , title:`Phase Right Now ${st}`})} ,
+           (e)=>{Toast.fire({icon:"error" , title:`Error Try Again Or contact us !`})},{edit:"status",value:st},ph.code)
+
+          
+          
+     
+        
+      }
+
+
+      useEffect(()=>{
+
+        loadPhases((e)=>{dispatch(actionsPhases.loadPhases(e.phases));dispatch(actionsDeliverables.loaddeliverables(extractDeliverables(e.phases))) ; console.log(extractDeliverables(e.phases));},(e)=>console.log(e),project)
+        
+
+       
+
+   
+     },[])
+
+     const SendD = (data)=>{
+        addDel((e)=>{dispatch(actionsDeliverables.adddeliverables(data));setOpen4(false);Toast.fire({icon:"success" , text:"Deliverable added !"}) },
+        (e)=>{console.log(e);Toast.fire({icon:"error" , text:"Could Be an instrnal error !"})},data)
+     }
       
  
 
@@ -110,6 +239,82 @@ export default function Phases ({ project , access }) {
 
 <DialogDelete res={'Phase'} open={open3} setOpen={setOpen3} handelDelete={()=> handelRemove(phasePoint)} />
 
+
+<Dialog open={open4} onClose={handelModel}>
+
+        <DialogTitle>  Add Deliverables </DialogTitle>
+        
+        <form onSubmit={handleSubmit((data)=> SendD(data))}>
+        <DialogContent dividers>
+
+        <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            {...register("name")}
+            label="Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+           <TextField
+           
+            margin="dense"
+            id="name"
+            style={{marginTop:'20px'}}
+            label="Decription"
+            {...register("description")}
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+
+         <TextField
+            {...register("phase")}
+            margin="dense"
+            id="name"
+            style={{marginTop:'20px'}}
+            label="Phase Code (number)"
+            type="number"
+            fullWidth
+            variant="standard"
+            required
+          />
+
+          
+         <TextField
+           {...register("filePath")}
+            margin="dense"
+            id="name"
+            style={{marginTop:'20px'}}
+            label="Path"
+            type="text"
+            fullWidth
+            variant="standard"
+            required
+          />
+
+          <Typography style={{marginTop:'20px'}} variant='body2' >
+             <b>NB : </b> Right Now we have just extrnal document upload files comming soon ...
+          </Typography>
+
+          </DialogContent>
+
+          <DialogActions >
+          <Button onClick={handelModel}>Cancel</Button>
+          <Button type='submit'> add </Button>
+        </DialogActions>
+
+        </form>
+     
+       
+
+       
+         
+
+      </Dialog>
 
 {
   access.C && <Fab onClick={handelCreate} color="primary" sx={fabStyle} aria-label="add">
@@ -144,11 +349,11 @@ export default function Phases ({ project , access }) {
 
            {
              team.map((e)=>(
-                 <Stack mt={2} key={e.id} direction='row' alignItems={'center'} spacing={2}>
-                    <Avatar alt={e.nom} src={e.photo} />
+                 <Stack mt={2} key={e[0] ? e[0].id : e.id} direction='row' alignItems={'center'} spacing={2}>
+                    <Avatar alt={e[0] ? e[0].nom : e.nom} src={e[0] ? e[0].photo : e.photo} />
 
                     <Typography variant='body2' sx={{ color: 'text.secondary' }} >
-                        {e.nom}
+                        {e[0] ? e[0].nom : e.nom + ' ' } {e[0] ? e[0].prenom : e.prenom}
                     </Typography>
 
                  </Stack>
@@ -199,7 +404,7 @@ export default function Phases ({ project , access }) {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell  align="left" scope="row">
-                {row.code}
+              CP-{row.code}
               </TableCell>
               <TableCell  align="left" scope="row">
                 {row.name}
@@ -216,7 +421,9 @@ export default function Phases ({ project , access }) {
                 {
                     row.assignedEmployees.map((e) => (
 
-                        <Avatar alt={e.name} src={e.photo} />
+                      
+
+                        <Avatar alt={e[0] ? e[0].nom : e.nom } src={e[0] ? e[0].photo : e.photo} />
 
                     ))
                 }
@@ -262,22 +469,22 @@ export default function Phases ({ project , access }) {
       > 
 
       {
-          status ===  'Revision' &&   <MenuItem sx={{color:'#2ed573'}}>
-          <Iconify  icon={'ion:checkmark-done-circle'} color='#2ed573' sx={{ mr: 2 } } />
+          status ===  'Revision' &&   <MenuItem onClick={()=> handelStatus('Done')}   sx={{color:'#2ed573'}}>
+          <Iconify icon={'ion:checkmark-done-circle'} color='#2ed573' sx={{ mr: 2 } } />
               Done
          </MenuItem>
       }
 
       
 {
-          status ===  'Ongoing' &&   <MenuItem sx={{color:'#ffa502'}}>
+          status ===  'Ongoing' &&   <MenuItem onClick={()=> handelStatus('Revision')} sx={{color:'#ffa502'}}>
           <Iconify  icon={'mdi:eye'} color='#ffa502' sx={{ mr: 2 } } />
           review
          </MenuItem>
       }
 
       {
-        status === 'Ongoing'  &&   <MenuItem sx={{color:'#2ed573'}}>
+        status === 'Ongoing'  &&   <MenuItem onClick={()=> handelStatus('Done')} sx={{color:'#2ed573'}}>
         <Iconify  icon={'ion:checkmark-done-circle'} color='#2ed573' sx={{ mr: 2 } } />
             Done
        </MenuItem>
@@ -309,7 +516,39 @@ export default function Phases ({ project , access }) {
 
 
 
-      <DialogCreate  childern={<FormCreatePhase setOpen={setOpen2} type={type} phase={phase} />} res={'Phase'} open={open2} setOpen={setOpen2}/>
+      <DialogCreate  childern={<FormCreatePhase project={project} setOpen={setOpen2} type={type} phase={phase} />}  res={'Phase'} open={open2} setOpen={setOpen2}/>
+
+
+    
+     <Grid mt={3} container spacing={2}>
+  <Grid item xs={12} md={6} lg={8}>
+  <AppNewsUpdate
+    title={<span className='align-child'>Deliverables <Iconify icon="icon-park-outline:delivery" color="#3867d6" /> <Iconify onClick={handelClick4} className='icon-right' icon='ph:plus-circle-bold' color='#1dd1a1'/> </span>}
+    list={deliverables}
+  />
+</Grid>
+
+<Grid item xs={12} md={6} lg={4}>
+  <AppOrderTimeline
+    title={<span className='align-child'> Ultimate results <Iconify onClick={handelModel} width='24px' height='24px' sx={{marginLeft:'6px'}} icon="fluent-emoji:newspaper" /></span>}
+    list={[...Array(5)].map((_, index) => ({
+      id: faker.datatype.uuid(),
+      title: [
+        'Phase CP-100',
+        'Phase CP-201 ',
+        'Phase CP-204',
+        'Phase CP-206',
+        'Phase CP-203',
+      ][index],
+      type: `order${index + 1}`,
+      time: faker.date.past(),
+    }))}
+  />
+</Grid>
+
+</Grid>
+
+
 
 
 

@@ -17,6 +17,8 @@ import DialogDelete from '../dialog-delete';
 import { useDispatch } from 'react-redux';
 import { actionsProjects } from '../../store';
 import { Toast } from '../aleart';
+import { deleteProject } from '../../store/res/projects';
+import { id } from 'date-fns/locale';
 
 
 
@@ -53,20 +55,18 @@ export default function Projectcart(props) {
   }
 
   const handelRemove = (i)=> {
-    console.log(i);
+  
     
+    deleteProject((e)=>{ dispatch(actionsProjects.removeProjects({id:i})) ; setOpen2(false) ; Toast.fire({icon:"info" , title:"Project Deleted !"}) },(e)=> console.log(e),i)
+   
 
-    dispatch(actionsProjects.removeProjects({id:i}))
 
-    setOpen2(false)
-
-    Toast.fire({icon:"info" , title:"Project Deleted !"})
-    
 
 
 }
 
   const handelDelete = ()=>{
+   
     setOpen(null)
 
     setOpen2(true)
@@ -151,10 +151,14 @@ export default function Projectcart(props) {
         pin
       </MenuItem>
 
-     <MenuItem  onClick={handelEdit}>
-        <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-        Edit
-      </MenuItem>
+      {
+        props.access.U &&  <MenuItem  onClick={handelEdit}>
+             <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
+             Edit
+           </MenuItem>
+      }
+
+   
      
 
      {
@@ -172,7 +176,7 @@ export default function Projectcart(props) {
 
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-           le {props.project.startDate} a {props.project.startEnd}
+           le {props.project.start_date} a {props.project.end_date}
         </Typography>
         <Typography variant="h5" component="div">
          {props.project.name}
@@ -182,7 +186,7 @@ export default function Projectcart(props) {
         </Typography>
         <img width={100} style={{marginTop:'15px'}} src={props.project.org.cover} alt='org' loading='lazy' />
         <Typography pt={1} style={{display:'flex',alignItems:'center'}} variant="body3">
-        <Avatar sx={{ bgcolor: 'rgb(76, 175, 80)' ,width:'35px' , height:'35px'}}><AccountBalanceIcon sx={{fontSize:'1.3rem'}}/> </Avatar>  <p style={{paddingLeft:'7px'}}>  {props.project.budget} </p>
+        <Avatar sx={{ bgcolor: 'rgb(76, 175, 80)' ,width:'35px' , height:'35px'}}><AccountBalanceIcon sx={{fontSize:'1.3rem'}}/> </Avatar>  <p style={{paddingLeft:'7px'}}>  {props.project.budget} DH </p>
         </Typography>
 
         <ProgressBar color={'#2ecc71'}  value={props.project.progress} />
@@ -195,7 +199,7 @@ export default function Projectcart(props) {
       </CardActions>
 
       <AvatarGroup max={1}>
-      <Avatar alt="Remy Sharp" src={props.project.chef.icon} />
+      <Avatar alt="Remy Sharp" src={props.project.chef.photo} />
   <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
   <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
   <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />

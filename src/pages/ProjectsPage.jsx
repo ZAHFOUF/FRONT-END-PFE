@@ -9,15 +9,18 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DialogCreate from '../components/dailog-create';
 import ProjectsList from '../components/projects/index';
 import Iconify from '../components/iconify';
+import { useContextProvider } from '../context/contextProvider';
 
 
 import logo from '../favicon-32x32.png';
-import { loadProjects } from '../store/res/projects';
+import { filterProjects, loadProjects } from '../store/res/projects';
 import { FormCreateProject } from '../components/form-create-project';
+import { actionsProjects } from '../store';
+
 
 
 
@@ -25,7 +28,12 @@ import { FormCreateProject } from '../components/form-create-project';
 export default function LabTabs(props) {
   const [value, setValue] = useState('1');
   const [open1, setOpen1] = useState(false);
-  const access = props.access;
+  const [project,setProjects] = useState([])
+  const access = props.access;  
+  const dipatch = useDispatch()
+  const { user } = useContextProvider()
+
+ 
 
  
 
@@ -33,6 +41,10 @@ export default function LabTabs(props) {
   const handleClose1 = () => {
     setOpen1(false);
   };
+
+  
+
+ 
 
   const projects = useSelector((state) => state.projects);
 
@@ -43,6 +55,21 @@ export default function LabTabs(props) {
   const addProject = () => {
     setOpen1(true);
   };
+
+  useEffect(()=>{
+    console.log(access , user);
+    if (access.R === false) {
+
+      console.log("OK");
+     
+      filterProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e),user.id)
+
+      
+    }else{
+      loadProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e))
+    }
+    
+  },[]) 
 
   
   
@@ -110,6 +137,9 @@ export default function LabTabs(props) {
      
       <DialogCreate childern={ <FormCreateProject setOpen={setOpen1} type={'create'}/>} res={'Project'} open={open1} setOpen={setOpen1}/>
         
+
+
+   
      
     </>
   );

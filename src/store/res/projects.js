@@ -7,13 +7,13 @@ import { fakeProjects } from '../fake data';
 import axiosClient from '../../api/axios';
 
 
-const pathProjects = "/api/"
+const pathProjects = "/api/projects"
 
 
 
 const projects = createSlice({
     name:"projects" , 
-    initialState : fakeProjects ,
+    initialState : [] ,
     reducers : {
         addProjects (projects,action) {
            return [...projects,action.payload]
@@ -54,7 +54,24 @@ export function  loadProjects (callback,err) {
 }
 
 
+export function  filterProjects (callback,err,id) {
+
+  axiosClient.get(pathProjects + `/filter?id=${id}`).then((e)=>{
+
+    callback(e.data)
+ 
+
+  }).catch((e)=>{
+      err(e)
+  })
+
+
+
+}
+
+
 export function  addProject (callback,err,data) {
+  console.log(data);
 
    axiosClient.post(pathProjects,data).then((e)=>{
 
@@ -86,7 +103,7 @@ export function  editProject (callback,err,data,id) {
 
 export function  deleteProject (callback,err,id) {
 
-   axiosClient.put(pathProjects + `/${id}`).then((e)=>{
+   axiosClient.delete(pathProjects + `/${id}`).then((e)=>{
 
      callback(e.data)
   

@@ -28,6 +28,7 @@ export const ContextProvider = ({children}) => {
        const userEmail = AES.decrypt(session.user.email,"younes") 
        const rl = AES.decrypt(session.user.role,"younes") 
        const photo = session.user.icon
+       const idd = session.user.id
       
 
 
@@ -36,7 +37,7 @@ export const ContextProvider = ({children}) => {
 
        tokenLocal = tk.toString(enc.Utf8)
 
-       var userCrypte ={name:userName.toString(enc.Utf8),email:userEmail.toString(enc.Utf8),icon:photo}
+       var userCrypte ={id:idd,name:userName.toString(enc.Utf8),email:userEmail.toString(enc.Utf8),icon:photo}
 
        us = userCrypte
 

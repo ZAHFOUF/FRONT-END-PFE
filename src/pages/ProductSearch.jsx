@@ -9,7 +9,6 @@ import Phases from '../components/phases-panel';
 
 
 
-
 // material-symbols:star-rate-rounded
 
 
@@ -24,7 +23,7 @@ export default function ProjectSearch(props) {
     const qu = window.location.search ;
     const params = queryString.parse(qu)
 
-    const projectFilter = projects.filter((e)=> e.id === params.q )
+    const projectFilter = projects.filter((e)=> e.id === Number(params.q)  )
 
     const project = projectFilter.length > 0 ? projectFilter[0] : null
 
@@ -35,7 +34,7 @@ export default function ProjectSearch(props) {
     <>
     
 
-    {projectFilter.length > 0 && 
+    {projectFilter.length === 1  && 
 
     <>
 
@@ -59,7 +58,7 @@ export default function ProjectSearch(props) {
 
 
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-           le {project.startDate} a {project.startEnd}
+           le {project.start_date} a {project.end_date}
         </Typography>
         <Typography pt={1} variant="body2">
           {project.des}
@@ -90,7 +89,7 @@ export default function ProjectSearch(props) {
       <Iconify sx={{width:'25px' , height:'25px'}} icon={'material-symbols:star-rate-rounded'} color={'#f1c40f'} />      <span> chef de project</span>  
         </Typography>
 
-        <Avatar    sx={{ width: '100%', height: '100%'   }} alt={project.chef.name} src={project.chef.icon} />
+        <Avatar    sx={{ width: '100%', height: '100%'   }} alt={project.chef.name} src={project.chef.photo} />
 
         <Typography variant="p" textAlign={'center'}  sx={{ marginLeft: '15px' , marginTop:'20px'}} component="div">
           {project.chef.name}
@@ -114,7 +113,9 @@ export default function ProjectSearch(props) {
 
               
 
-          <Phases access={props.access.phases} />
+          <Phases project={Number(params.q)} access={props.access.phases} />
+
+
     
 
 

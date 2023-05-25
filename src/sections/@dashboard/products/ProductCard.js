@@ -23,25 +23,17 @@ ShopProductCard.propTypes = {
   product: PropTypes.object,
 };
 
-const getRandomImage = () => {
-  const width = Math.floor(Math.random() * 400) + 200; // Generate a random width between 200 and 600
-  const height = Math.floor(Math.random() * 400) + 200; // Generate a random height between 200 and 600
-  const baseUrl = 'https://picsum.photos/'; // Replace with the base URL of the image source you'd like to use
-  const imageUrl = `${baseUrl}${width}/${height}`; // Construct the image URL with the width and height
-
-  return imageUrl;
-};
 
 // Example usage:
 
 export default function ShopProductCard({ product }) {
-  const { name, address, contactPhone , contactEmail } = product;
+  const { name, address, contactPhone ,cover , contactEmail } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
     
-        <StyledProductImg alt={name} src={getRandomImage()} />
+        <StyledProductImg alt={name} src={cover} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>

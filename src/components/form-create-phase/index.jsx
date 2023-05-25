@@ -1,7 +1,12 @@
+/* eslint-disable prefer-const */
+/* eslint-disable vars-on-top */
+/* eslint-disable no-var */
+/* eslint-disable import/order */
 /* eslint-disable array-callback-return */
 /* eslint-disable prefer-template */
 /* eslint-disable react/jsx-key */
 import React, { useEffect, useState } from 'react';
+import { addPhase } from '../../store/res/phases';
 import { Button , Chip , Box, Container, Typography, Grid , Input, InputAdornment, OutlinedInput, TextField, InputLabel, Select, MenuItem, FormControl, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { AccountCircle } from '@mui/icons-material';
@@ -35,7 +40,7 @@ function getStyles(name, personName, theme) {
 
 
 
-export const FormCreatePhase = ({type , phase , setOpen}) => {
+export const FormCreatePhase = ({type ,project , phase , setOpen}) => {
 
     const { register, handleSubmit } = useForm();
     const [names,setNames] = useState([])
@@ -72,6 +77,11 @@ export const FormCreatePhase = ({type , phase , setOpen}) => {
     };
 
    const Send = (data)=>{
+    var  emp = data.assignedEmployees
+    let sendFront = data
+   
+
+
         if (type === 'edit') {
           const send = data
           send.code = "CRP-005"
@@ -85,16 +95,30 @@ export const FormCreatePhase = ({type , phase , setOpen}) => {
             Toast.fire({icon : "success" ,  title:"phase Edited !" })
            
         }else{
-          const send = data
-          send.code = "CRP-005"
+
+          // eslint-disable-next-line no-unused-vars
+
+          
+          sendFront.project = project
+          sendFront.assignedEmployees = [] 
+         
+          emp.map((e,i)=>{
+           sendFront.assignedEmployees.push( JSON.parse(e) ) })
+
+           console.log(sendFront.assignedEmployees);
+          
+ 
+
+       addPhase((e)=>{sendFront.code = e.id ; dispatch(actionsPhases.addPhases(sendFront))  ; setOpen(false) ;   Toast.fire({icon : "success" ,  title:"phase Created !" }) },(e)=>{console.log(e);Toast.fire({icon : "error" ,  title:"error in database !" })},sendFront)
+         
           
 
-          send.assignedEmployees.map((e,i)=>{
-           send.assignedEmployees[i] = JSON.parse( send.assignedEmployees[i])
-          })
-          dispatch(actionsPhases.addPhases(send))
-            setOpen(false)
-            Toast.fire({icon : "success" ,  title:"phase Created !" })
+        
+
+  
+     
+            
+          
             
 
              
@@ -234,7 +258,7 @@ export const FormCreatePhase = ({type , phase , setOpen}) => {
                     Start end
                   </Typography>
       
-      <Input  {...register(' endDate' , { value: type === 'create' ? ' ' : phase.endDate })} required type='date' fullWidth   />
+      <Input  {...register('endDate' , { value: type === 'create' ? ' ' : phase.endDate })} required type='date' fullWidth   />
       
     
       
@@ -260,7 +284,7 @@ export const FormCreatePhase = ({type , phase , setOpen}) => {
           {names.map((e) => (
             <MenuItem
               key={e.id}
-              value={JSON.stringify({nom:e.nom + ' ' + e.prenom , photo : e.photo , id:e.id})}
+              value={JSON.stringify({nom:e.nom , prenom : e.prenom , photo : e.photo , id:e.id})}
               style={getStyles(e.nom + ' ' + e.prenom, e.nom , theme)}
             >
               {e.nom + ' ' + e.prenom}

@@ -1,11 +1,16 @@
 /* eslint-disable prefer-template */
 /* eslint-disable react/jsx-key */
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+
 import { Button, Container, Typography, Grid , Input, InputAdornment, OutlinedInput, TextField, InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import axiosClient from '../../api/axios';
 import { Toast } from '../aleart';
+import { addProject, editProject } from '../../store/res/projects';
+import { actionsProjects } from '../../store';
+
 
 
 
@@ -18,11 +23,16 @@ import { Toast } from '../aleart';
 export const FormCreateProject = ({type , project , setOpen}) => {
 
     const { register, handleSubmit } = useForm();
+    const dispatch = useDispatch()
+    console.log(project);
 
 
-    const [chef,setChef] = useState(type === 'create' ? ' s' : project.chef.name)
+    const [chef,setChef] = useState(type === 'create' ? ' ' : project.chef.name)
+    const [status,setStatus] =useState(type === 'create' ? ' ' : project.status)
     const [chefs,setChefs] = useState([])
     const [org,setOrg] = useState(type === 'create' ? 'IAM' : project.org.name)
+
+    const [orgs,setOrgs] = useState([])
 
     const handleChange2 = (event, newValue) => {
         setChef(event.target.value)
@@ -32,16 +42,25 @@ export const FormCreateProject = ({type , project , setOpen}) => {
        setOrg(event.target.value)
     };
 
+    const handleChange4 = (event, newValue) => {
+      setStatus(event.target.value)
+   };
+
    const Send = (data)=>{
         if (type === 'edit') {
-        
-            setOpen(false)
-            Toast.fire({icon : "success" ,  title:"Project Edited !" })
-            console.log('edit',data);
+          data.progress= project.progress
+        console.log(data);
+          editProject((e)=>{ dispatch(actionsProjects.upProjects({id:project.id,data:e.project}));  setOpen(false) ;Toast.fire({icon : "success" ,  title:"Project Created !" }) },(e)=>{console.log(e); Toast.fire({icon : "error" ,  title:'error in database !' })},data,project.id)
+
         }else{
-            setOpen(false)
-            Toast.fire({icon : "success" ,  title:"Project Created !" })
-            console.log('create',data);
+
+          data.progress= 0
+          data.status = 'In'
+          console.log(data);
+            addProject((e)=>{ dispatch(actionsProjects.addProjects(e.project));  setOpen(false) ;Toast.fire({icon : "success" ,  title:"Project Created !" }) },(e)=> Toast.fire({icon : "error" ,  title:'error in database !' }),data)
+           
+            
+            
         }
    }
 
@@ -56,6 +75,16 @@ export const FormCreateProject = ({type , project , setOpen}) => {
 
 
         })
+
+        axiosClient.get("/api/organisations").then((e)=>{
+          const data  = e.data.organisations
+
+     
+
+         setOrgs(data)
+
+
+     })
 
         
 
@@ -128,8 +157,7 @@ export const FormCreateProject = ({type , project , setOpen}) => {
           }
         >
           
-          <MenuItem value={'IAM'}> IAM </MenuItem>
-          <MenuItem value={'IBM'}> IBM </MenuItem>
+          {orgs.map((e)=> <MenuItem value={e.id}> {e.name} </MenuItem> )}
         </Select>
       
       </FormControl>
@@ -150,13 +178,13 @@ export const FormCreateProject = ({type , project , setOpen}) => {
                     Start in
                   </Typography>
       
-      <Input  {...register('startDate' , { value: type === 'create' ? ' ' : project.startDate })} required type='date' fullWidth   />
+      <Input  {...register('start_date' , { value: type === 'create' ? ' ' : project.start_date })} required type='date' fullWidth   />
       
       <Typography style={{marginLeft : '0px'}} sx={{ ml: 2, flex: 1 , mt:4 }} variant="h6" component="div">
                     Start end
                   </Typography>
       
-      <Input  {...register('startEnd' , { value: type === 'create' ? ' ' : project.startEnd })} required type='date' fullWidth   />
+      <Input  {...register('end_date' , { value: type === 'create' ? ' ' : project.end_date })} required type='date' fullWidth   />
       
       <FormControl  sx={{mt:5}} fullWidth>
       <InputLabel id="demo-simple-select-autowidth-label"> Chef de Project </InputLabel>
@@ -174,6 +202,29 @@ export const FormCreateProject = ({type , project , setOpen}) => {
           }
         >
          {chefs.map((e)=> <MenuItem value={e.id}> {e.nom + ' ' + e.prenom } </MenuItem> )}
+        </Select>
+      
+      </FormControl>
+      
+
+      <FormControl  sx={{mt:5}} fullWidth>
+      <InputLabel id="demo-simple-select-autowidth-label"> Status </InputLabel>
+      <Select
+       {...register('status' )}
+      required
+          id="demo-simple-select"
+          value={status}
+          fullWidth
+          onChange={handleChange4}
+          startAdornment={
+            <InputAdornment position="start">
+              <AccountCircle />
+            </InputAdornment>
+          }
+        >
+        <MenuItem value={'In'}>In progress</MenuItem>
+        <MenuItem value={'Com'}>Completed</MenuItem>
+        <MenuItem value={'Can'}>Canceled</MenuItem>
         </Select>
       
       </FormControl>

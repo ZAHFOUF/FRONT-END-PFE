@@ -14,9 +14,9 @@ export const fakePhases = [
          { id: 3, nom: "Alex Johnson" , photo:'https://mui.com/static/images/avatar/3.jpg' },
        ],
        deliverables: [
-         { code: "DLVR-001", name: "Initial UI Design", description: "Mockup of UI design" },
-         { code: "DLVR-002", name: "React Components", description: "Developing reusable React components" },
-         { code: "DLVR-003", name: "API Integration", description: "Integration with backend API endpoints" },
+         { code: "DLVR-001", name: "Initial UI Design", description: "Mockup of UI design"  , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
+         { code: "DLVR-002", name: "React Components", description: "Developing reusable React components"  , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
+         { code: "DLVR-003", name: "API Integration", description: "Integration with backend API endpoints"  , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
        ],
        status: "Ongoing",
      } ,
@@ -33,8 +33,8 @@ export const fakePhases = [
          { id: 5, nom: "Michael Brown" , photo: 'https://mui.com/static/images/avatar/2.jpg' },
        ],
        deliverables: [
-         { code: "DLVR-004", name: "Wireframe Design", description: "Creating wireframes for UI" },
-         { code: "DLVR-005", name: "Backend Integration", description: "Integrating with backend systems" },
+         { code: "DLVR-004", name: "Wireframe Design", description: "Creating wireframes for UI"  , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
+         { code: "DLVR-005", name: "Backend Integration", description: "Integrating with backend systems"  , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
        ],
        status: "Revision",
      }
@@ -53,9 +53,9 @@ export const fakePhases = [
         { id: 3, nom: "Alex Johnson" , photo:'https://mui.com/static/images/avatar/4.jpg' },
        ],
        deliverables: [
-         { code: "DLVR-006", name: "User Authentication", description: "Implementing user authentication functionality" },
-         { code: "DLVR-007", name: "Database Integration", description: "Integrating with a database system" },
-         { code: "DLVR-008", name: "Testing and Bug Fixes", description: "Performing testing and fixing bugs" },
+         { code: "DLVR-006", name: "User Authentication", description: "Implementing user authentication functionality" , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
+         { code: "DLVR-007", name: "Database Integration", description: "Integrating with a database system" , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
+         { code: "DLVR-008", name: "Testing and Bug Fixes", description: "Performing testing and fixing bugs" , filePath:"https://drive.google.com/file/d/1WmrfNa5xVll-eZIhHDiIIPwf1STtx9eW/view" },
        ],
        status: "Ongoing",
      }

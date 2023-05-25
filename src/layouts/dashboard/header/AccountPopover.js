@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
+import { Toast } from '../../../components/aleart';
 
 import { useContextProvider } from '../../../context/contextProvider';
 
@@ -56,9 +57,9 @@ export default function AccountPopover({user}) {
       console.log(e);
       _setToken(0)
       localStorage.removeItem("user_session")
-      navigate("/login")
+      window.location.href = '/login';
     }).catch((e)=>{
-      Swal.fire({"icon":"error","text":"something wrong"})
+      Toast.fire({icon:"error" , title:"something Wrong in the server !"})
       console.log(e);
 
 

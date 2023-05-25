@@ -122,6 +122,25 @@ div.swal2-container{
     padding: 23px !important;
   }
 
+  .align-child{
+    display: flex !important;
+    align-items: center !important;
+  }
+
   .phases-style .css-1viyaj4-MuiAvatarGroup-root .MuiAvatar-root:last-child {
     margin-left: -5px;
+}
+
+a{
+  color: inherit ;
+    text-decoration: none !important;
+}
+
+.icon-right{
+   position: absolute;
+   right: 5%;
+    top: 4%;
+    cursor: pointer;
+    width: 24px !important; 
+    height: 24px !important;
 }
