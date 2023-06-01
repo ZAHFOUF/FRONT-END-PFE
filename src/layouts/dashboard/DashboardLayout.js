@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 /* eslint-disable prefer-template */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable prefer-const */
@@ -16,7 +17,7 @@ import { styled } from '@mui/material/styles';
 
 import { faker } from '@faker-js/faker';
 
-import { sample } from 'lodash';
+import _, { sample } from 'lodash';
 
 import Iconify from '../../components/iconify';
 
@@ -35,9 +36,8 @@ import Nav from './nav';
 
 
 import SvgColor from '../../components/svg-color';
-import { respo } from '../../_mock/user'
 
-import axios from '../../api/axios';
+import axiosClient from '../../api/axios';
 
 
 
@@ -83,26 +83,29 @@ const Main = styled('div')(({ theme }) => ({
 
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
-  const {token , user} = useContextProvider()
+  const {token , permissions , user , _setToken , can } = useContextProvider()
+  
   const navigate = useNavigate();
   useEffect(()=>{
     if (    token === 0 ) {
         navigate("/login")
     }
+
   },[])
 
   /* ----------------------- config of nav ------------------------------------ */
 
   const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
-const navConfigFilter = []
 
 
-const navConfig = [
-  {
+  const [navConfigFilter,setnavConfigFilter] = useState([ {
     title: 'dashboard',
     path: '/dashboard/',
     icon: icon('ic_analytics'),
-  },
+  }])
+
+
+const navConfig = [
   {
     title: 'employees',
     path: '/employees',
@@ -114,24 +117,20 @@ const navConfig = [
     icon: <BusinessOutlinedIcon color="action" />,
   },
   {
-    title: 'blog',
-    path: '/blog',
-    icon: icon('ic_blog'),
-  },
-  {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
-  },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic_disabled'),
-  },
-  {
     title: 'projects',
     path: '/projects',
     icon: <Iconify icon='grommet-icons:projects' color='#637381' /> ,
+  } ,
+  {
+    title: 'roles',
+    path: '/roles',
+    icon: <Iconify style={{width:'25px' , height:'25px'}} icon='fa-solid:users-cog' color='#637381' /> ,
+  }
+  ,
+  {
+    title: 'blog',
+    path: '/blog',
+    icon: icon('ic_blog'),
   },
   {
     title: 'phases',
@@ -141,32 +140,29 @@ const navConfig = [
 ];
 
 
-respo().map((e1)=>{
-   // eslint-disable-next-line no-var
-   var item = navConfig.filter((e)=> e.title === e1.reccord)
-   if (item[0]) {
-    navConfigFilter.push(item[0])
-   }
-  
-   return 0
- 
-}) 
+useEffect(()=>{
+  checkAbilities()
+  console.log(navConfigFilter);
+},[permissions])
 
-/* -------------- end of confug ------------------- */
 
 
 
 
 
 
-if (localStorage.getItem("user_session")) {
-  const key = JSON.parse(localStorage.getItem("user_session"))
-  const hash = AES.decrypt(key.user.role,"younes")
-const role = hash.toString(enc.Utf8)
-user.icon =  key.user.icon
+/* -------------- end of confug ------------------- */
+
+
+function checkAbilities () {
+  const filter = []
+  can("read-user") ? filter.push(navConfig[0]) : null
+  can("read-org") ? filter.push(navConfig[1]) : null
+  can("read-project") || can("read-his-project") ? filter.push(navConfig[2]) : null
+  can("read-role") ? filter.push(navConfig[3]) : null
+  setnavConfigFilter([...navConfigFilter , ...filter])
+
 }
-
-
 
 
   

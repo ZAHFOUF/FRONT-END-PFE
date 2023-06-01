@@ -127,6 +127,11 @@ div.swal2-container{
     align-items: center !important;
   }
 
+  .center-child{
+    display: flex !important;
+    justify-content: center !important;
+  }
+
   .phases-style .css-1viyaj4-MuiAvatarGroup-root .MuiAvatar-root:last-child {
     margin-left: -5px;
 }

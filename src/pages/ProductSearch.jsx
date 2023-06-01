@@ -1,11 +1,15 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import queryString from 'query-string';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Typography , CardContent , Avatar  , Grid , Container   } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { ProgressBar } from '../components/progress/index';
 import Iconify from '../components/iconify';
 import Phases from '../components/phases-panel';
+import { useContextProvider } from '../context/contextProvider';
+import { actionsProjects } from '../store';
+import { filterProjects, loadProjects } from '../store/res/projects';
+
 
 
 
@@ -28,6 +32,24 @@ export default function ProjectSearch(props) {
     const project = projectFilter.length > 0 ? projectFilter[0] : null
 
     const classDesign = props.status === 'Can' ? 'can_case' : 'normal_case'
+    const { user , can } = useContextProvider()
+    const dipatch = useDispatch()
+
+
+
+    useEffect(()=>{
+
+      if (can("read-his-project") && !can("read-project")) {
+  
+       
+        filterProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e),user.id)
+  
+        
+      }else if (can("read-project")){
+        loadProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e))
+      }
+      
+    },[can("read-his-project"),can("read-project")]) 
 
 
   return (
@@ -104,16 +126,11 @@ export default function ProjectSearch(props) {
 
   </Grid>
 
-       
+              {
+                can("read-phase") && <Phases project={Number(params.q)}  />
+              }
 
-
-        <Typography variant="h4" sx={{marginBottom: '13px',  marginLeft: '15px' , marginTop:'40px'}} component="div">
-          Phases Of The Project
-        </Typography>
-
-              
-
-          <Phases project={Number(params.q)} access={props.access.phases} />
+          
 
 
     

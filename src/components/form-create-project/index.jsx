@@ -57,7 +57,7 @@ export const FormCreateProject = ({type , project , setOpen}) => {
           data.progress= 0
           data.status = 'In'
           console.log(data);
-            addProject((e)=>{ dispatch(actionsProjects.addProjects(e.project));  setOpen(false) ;Toast.fire({icon : "success" ,  title:"Project Created !" }) },(e)=> Toast.fire({icon : "error" ,  title:'error in database !' }),data)
+            addProject((e)=>{ dispatch(actionsProjects.addProjects(e.project));  setOpen(false) ;Toast.fire({icon : "success" ,  title:"Project Created !" }) },(e)=> {Toast.fire({icon : "error" ,  title:'error in database !' }); console.log(e) },data)
            
             
             

@@ -35,6 +35,7 @@ import {
   AppConversionRates,
 } from '../../sections/@dashboard/app';
 import { addDel } from '../../store/res/deliverables';
+import { useContextProvider } from '../../context/contextProvider';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -76,9 +77,11 @@ BootstrapDialogTitle.propTypes = {
 
 
 
-export default function Phases ({ project , access }) {
+export default function Phases ({ project  }) {
   const dispatch = useDispatch()
   const { register, handleSubmit } = useForm();
+
+  const { can } = useContextProvider()
 
   
 
@@ -317,7 +320,7 @@ export default function Phases ({ project , access }) {
       </Dialog>
 
 {
-  access.C && <Fab onClick={handelCreate} color="primary" sx={fabStyle} aria-label="add">
+  can("create-phase") && <Fab onClick={handelCreate} color="primary" sx={fabStyle} aria-label="add">
   <Iconify icon='ri:add-fill' color='#FFF' />
 </Fab>
 }
@@ -364,7 +367,7 @@ export default function Phases ({ project , access }) {
         </Stack>
         <Divider sx={{ borderStyle: 'dashed' }} />
         {
-          access.C &&     
+          can("edit-phase") &&     
 
           <MenuItem  sx={{ m: 1 }}>
           
@@ -378,7 +381,9 @@ export default function Phases ({ project , access }) {
       </Popover>
 
 
-         
+      <Typography sx={{mt:3 , mb:2}} variant='h4'>
+              Phase Of the Project
+           </Typography>
 
             <TableContainer className='phases-style' style={{marginTop:'30px'}} component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -392,7 +397,7 @@ export default function Phases ({ project , access }) {
             <TableCell align="left"> Status </TableCell>
             <TableCell align="left"> Team </TableCell>
             {
-              access.DU && <TableCell align="left">   </TableCell>
+              can("edit-phase") && <TableCell align="left">   </TableCell>
             }
             
           </TableRow>
@@ -433,7 +438,7 @@ export default function Phases ({ project , access }) {
               
                </TableCell>
                {
-                access.DU &&   <TableCell align="left">
+                can("edit-phase") &&   <TableCell align="left">
                 <IconButton size="large" color="inherit" onClick={(event)=> handleOpenMenu(event,row)}>
                 <Iconify icon={'eva:more-vertical-fill'} />
                 </IconButton>
@@ -518,12 +523,11 @@ export default function Phases ({ project , access }) {
 
       <DialogCreate  childern={<FormCreatePhase project={project} setOpen={setOpen2} type={type} phase={phase} />}  res={'Phase'} open={open2} setOpen={setOpen2}/>
 
-
-    
-     <Grid mt={3} container spacing={2}>
+{
+  can("read-livrable") &&   <Grid mt={3} container spacing={2}>
   <Grid item xs={12} md={6} lg={8}>
   <AppNewsUpdate
-    title={<span className='align-child'>Deliverables <Iconify icon="icon-park-outline:delivery" color="#3867d6" /> <Iconify onClick={handelClick4} className='icon-right' icon='ph:plus-circle-bold' color='#1dd1a1'/> </span>}
+    title={<span className='align-child'>Deliverables <Iconify icon="icon-park-outline:delivery" color="#3867d6" /> { can("create-livrable") && <Iconify onClick={handelClick4} className='icon-right' icon='ph:plus-circle-bold' color='#1dd1a1'/> }</span>}
     list={deliverables}
   />
 </Grid>
@@ -547,6 +551,9 @@ export default function Phases ({ project , access }) {
 </Grid>
 
 </Grid>
+} 
+    
+   
 
 
 

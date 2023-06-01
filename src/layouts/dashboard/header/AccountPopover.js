@@ -54,20 +54,17 @@ export default function AccountPopover({user}) {
 
   const handleLogout = (event) =>{
     axios.post("api/logout").then((e)=>{
-      console.log(e);
       _setToken(0)
       localStorage.removeItem("user_session")
       window.location.href = '/login';
     }).catch((e)=>{
       Toast.fire({icon:"error" , title:"something Wrong in the server !"})
-      console.log(e);
 
 
     })
     
   }
 
-  console.log(user.icon);
 
   return (
     <>
@@ -88,7 +85,7 @@ export default function AccountPopover({user}) {
           }),
         }}
       >
-        <Avatar src={user.icon} alt="photoURL" />
+        <Avatar src={user !== undefined  ? user.photo : ' '} alt="photoURL" />
       </IconButton>
 
       <Popover
@@ -112,10 +109,10 @@ export default function AccountPopover({user}) {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user.name}
+            {user !== undefined ? user.nom + user.prenom : ' '}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user.email}
+            {user !== undefined ? user.email : ' '}
           </Typography>
         </Box>
 

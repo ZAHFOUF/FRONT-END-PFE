@@ -19,7 +19,7 @@ import { actionsProjects } from '../../store';
 import { Toast } from '../aleart';
 import { deleteProject } from '../../store/res/projects';
 import { id } from 'date-fns/locale';
-
+import { useContextProvider } from '../../context/contextProvider';
 
 
 
@@ -37,6 +37,8 @@ export default function Projectcart(props) {
   const [open, setOpen] = useState(null);
   const [open2, setOpen2] = useState(false);
   const dispatch = useDispatch()
+  const { can } = useContextProvider()
+
 
 
   const handleOpenMenu = (event,id) => {
@@ -152,7 +154,7 @@ export default function Projectcart(props) {
       </MenuItem>
 
       {
-        props.access.U &&  <MenuItem  onClick={handelEdit}>
+        can("edit-project") &&  <MenuItem  onClick={handelEdit}>
              <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
              Edit
            </MenuItem>
@@ -162,7 +164,7 @@ export default function Projectcart(props) {
      
 
      {
-       props.access.D && <MenuItem onClick={()=> handelDelete(props.project.id)}  sx={{ color: 'error.main' }}>
+       can("delete-project") && <MenuItem onClick={()=> handelDelete(props.project.id)}  sx={{ color: 'error.main' }}>
        <Iconify  icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
        Delete
      </MenuItem>

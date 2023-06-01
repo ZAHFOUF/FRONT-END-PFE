@@ -1,11 +1,11 @@
+/* eslint-disable prefer-template */
+/* eslint-disable react/prop-types */
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
-// mock
-import account from '../../../_mock/account';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // components
@@ -40,6 +40,7 @@ Nav.propTypes = {
 
 export default function Nav({ openNav, onCloseNav , user , navConfig }) {
   const { pathname } = useLocation();
+  console.log(user);
 
 
   const isDesktop = useResponsive('up', 'lg');
@@ -65,15 +66,15 @@ export default function Nav({ openNav, onCloseNav , user , navConfig }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={user.icon} alt="photoURL" />
+            <Avatar src={user !== undefined ? user.photo : ' ' } alt="photoURL" />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {user.name}
+                { user !== undefined ? user.nom + ' ' +  user.prenom : 'user name' }
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                {user !== undefined ? user.role[0].name : ' '}
               </Typography>
             </Box>
           </StyledAccount>

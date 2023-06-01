@@ -8,19 +8,19 @@ import Iconify from '../../../components/iconify';
 
 const StyledRoot = styled('div')(({ theme }) => ({
   zIndex: 999,
-  right: 0,
+  right: '0px',
   display: 'flex',
   cursor: 'pointer',
   position: 'fixed',
   alignItems: 'center',
-  top: theme.spacing(16),
+  top: theme.spacing(17),
   height: theme.spacing(5),
   paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(2),
-  paddingTop: theme.spacing(1.25),
+  paddingTop: '4px' ,
   boxShadow: theme.customShadows.z20,
-  color: theme.palette.text.primary,
-  backgroundColor: theme.palette.background.paper,
+  color: theme.palette.grey[0],
+  backgroundColor: theme.palette.primary.main ,
   borderTopLeftRadius: Number(theme.shape.borderRadius) * 2,
   borderBottomLeftRadius: Number(theme.shape.borderRadius) * 2,
   transition: theme.transitions.create('opacity'),
@@ -32,9 +32,7 @@ const StyledRoot = styled('div')(({ theme }) => ({
 export default function CartWidget() {
   return (
     <StyledRoot>
-      <Badge showZero badgeContent={0} color="error" max={99}>
-        <Iconify icon="eva:shopping-cart-fill" width={24} height={24} />
-      </Badge>
+        <Iconify icon="typcn:plus" width={24} height={24} />
     </StyledRoot>
   );
 }

@@ -11,9 +11,7 @@ export default function PhasesPage (props){
     return(
         <>
 
-           <Typography variant='h4'>
-              Phase Of the Project
-           </Typography>
+        
 
            <Phases access={props.access} />
         

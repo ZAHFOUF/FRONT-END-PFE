@@ -13,7 +13,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
 
-import { actionsUsers } from '../store';
+import { actionsRoles, actionsUsers } from '../store';
 // @mui
 import {
   Card,
@@ -67,6 +67,7 @@ import Swal from 'sweetalert2';
 import { Message } from '@mui/icons-material';
 import { useContextProvider } from '../context/contextProvider';
 import { useNavigate } from 'react-router-dom';
+import { loadRoles } from '../store/res/roles';
 
 
 // --------------------------------------------------------------------------
@@ -116,7 +117,6 @@ function applySortFilter(array, comparator, query) {
 
 const load = true
 
-console.log(load);
 
 export default function UserPage(props) {
   const [open, setOpen] = useState(null);
@@ -140,6 +140,8 @@ export default function UserPage(props) {
   const [open4, setOpen4] = useState(false)
   const [open5, setOpen5] = useState(false)
   const [open6, setOpen6] = useState(true)
+  const roles =useSelector((state)=> state.roles)
+
 
   const [message, setMessage] = useState(' ')
 
@@ -188,7 +190,6 @@ export default function UserPage(props) {
     setOpen6(false);
 };
 
-  const access = props.access;
 
 
   const USERLIST = useSelector((state)=>{
@@ -206,7 +207,6 @@ const handleChangePhoto = (e) => {
   const handleOpenMenu = (event,id) => {
     setOpen(event.currentTarget);
     setuserPoint(id)
-    console.log(userPoint,'vs',id);
   };
 
   const handelDelete =()=>{
@@ -298,7 +298,6 @@ const headers = {  'Content-Type': 'multipart/form-data' }
 
       axios.post("/api/users",formData,headers).then((e)=>{
 
-        console.log("data",e.data);
        
         
          const resUser = {
@@ -334,7 +333,6 @@ const headers = {  'Content-Type': 'multipart/form-data' }
 
       axios.put(`/api/users/${userPoint}`,data).then((e)=>{
 
-        console.log(e.data);
        
         
         const resUser = {
@@ -362,7 +360,6 @@ const headers = {  'Content-Type': 'multipart/form-data' }
   }
 
   const handelName = (e)=>{
-        console.log(e);
         setuserUpdate({name:e.target.value , phone:userUpdate.phone  , email: userUpdate.email , prenom:userUpdate.prenom})
   }
 
@@ -374,7 +371,7 @@ const handelPrenom = (e)=>{
   setuserUpdate({name: userUpdate.name , phone:userUpdate.phone , email:  userUpdate.email , prenom:e.target.value})
 }
 
-const { _setToken , setUser } = useContextProvider()
+const { _setToken , setUser , can } = useContextProvider()
 
 /* ----------------------------------- axios load data -------------------------------------------*/
 
@@ -390,8 +387,6 @@ let users = []
   
     const data = e.data.data
 
-    console.log(data);
-
     
     
   
@@ -405,12 +400,13 @@ let users = []
         isVerified: faker.datatype.boolean(),
         status: 'active',
         phone:e.phone_number ,
-        role: e.role[0].name,
+        role: e.role[0]?.name ?? null,
        })
   
        return 0
   
     })
+
   
     
   
@@ -439,15 +435,19 @@ let users = []
     }
   
   })
+
+  if (  can("read-roles")  ) {
+    loadRoles((e)=>{dispatch(actionsRoles.loadRoles(e.roles))})
+
+    
+  }
+
+
+
+
+
 },[dispatch])
 
-
-  axios.get("/api/users/2").then((e)=>{
-    console.log("user",e);
-    
-  }).catch((e)=>{
-     console.log(e);
-  })
 
 /* ----------------------------------------------------------------------------------------*/
 
@@ -611,12 +611,13 @@ let users = []
           label="Age"
           
         >
-         
-          <MenuItem value={'admin'}> admin </MenuItem>
-          <MenuItem value={'directeur'}>directeur</MenuItem>
-          <MenuItem value={'chef_projet'}>chef_projet</MenuItem>
-          <MenuItem value={'secretaire'}>secretaire</MenuItem>
-          <MenuItem value={'comptable'}>comptable</MenuItem>
+
+          {
+            roles.map((e)=>(
+              <MenuItem value={e.name}> {e.name} </MenuItem>
+            ))
+          }
+
         </Select>
       </FormControl>
         </DialogContent>
@@ -642,7 +643,7 @@ let users = []
 
       
           {
-            access.C &&  <Button onClick={handleClickOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+            can("create-user") &&  <Button onClick={handleClickOpen} variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Employees
           </Button>
           }
@@ -718,14 +719,14 @@ let users = []
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
 
-                        {
-                          access.DU  &&
+                        
+                         
                           <TableCell align="right" >
                        <IconButton size="large" color="inherit" onClick={(event)=> handleOpenMenu(event,id)} >
                          <Iconify icon={'eva:more-vertical-fill'} />
                        </IconButton>
                      </TableCell>
-                        }
+                        
 
                         
                         
@@ -799,14 +800,14 @@ let users = []
       > 
 
       {
-        access.U &&  <MenuItem onClick={handelUpdate}>
+        can("edit-user") &&  <MenuItem onClick={handelUpdate}>
         <Iconify  icon={'eva:edit-fill'} sx={{ mr: 2 }} />
         Edit
       </MenuItem>
       }
 
 {
-        access.D &&   <MenuItem onClick={handelDelete} sx={{ color: 'error.main' }}>
+        can("delete-user") &&   <MenuItem onClick={handelDelete} sx={{ color: 'error.main' }}>
         <Iconify  icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
         Delete
       </MenuItem>

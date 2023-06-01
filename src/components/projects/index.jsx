@@ -15,11 +15,11 @@ ProjectsList.propTypes = {
 };
 
 
-
-export default function ProjectsList({ projects, access , setOpen , type , ...other }) {
+export default function ProjectsList({ projects , setOpen , type , ...other }) {
 
   const [edit,setEdit] = useState(false)
   const [project,setProject] = useState({})
+
 
   const handelEdit =(pro)=>{
         setEdit(true)
@@ -35,7 +35,7 @@ export default function ProjectsList({ projects, access , setOpen , type , ...ot
     <Grid container spacing={3} {...other}>
       {projectFilter.map((project) => (
         <Grid key={project.id} item xs={12} sm={6} md={4}>
-          <Projectcart access={access} edit={edit} setEdit={handelEdit} project={project} setProject={setProject} />
+          <Projectcart  edit={edit} setEdit={handelEdit} project={project} setProject={setProject} />
         </Grid>
       ))}
 

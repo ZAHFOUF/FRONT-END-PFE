@@ -81,7 +81,7 @@ const palette = {
   info: INFO,
   success: SUCCESS,
   warning: WARNING,
-  error: ERROR,
+  error:ERROR,
   grey: GREY,
   divider: alpha(GREY[500], 0.24),
   text: {

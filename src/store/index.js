@@ -6,6 +6,7 @@ import organismes from './res/organismes';
 import projects from './res/projects';
 import phases from './res/phases';
 import deliverables from './res/deliverables';
+import roles from './res/roles';
 
 
 
@@ -17,9 +18,12 @@ export const store = configureStore ({
         organismes : organismes.reducer ,
         projects:projects.reducer ,
         phases : phases.reducer , 
-        deliverables : deliverables.reducer
+        deliverables : deliverables.reducer ,
+        roles : roles.reducer
      }
 })
+
+
 export const actionsUsers = users.actions
 
 export const actionsOrganismes = organismes.actions
@@ -30,11 +34,10 @@ export const actionsDeliverables = deliverables.actions
 
 export const actionsPhases = phases.actions
 
+export const actionsRoles = roles.actions
 
 
 
-/* store.dispatch({
-     type:"users/addUsers",
-     payload:{name:"Younes",id:uuid()}
-}) */
+
+
 

@@ -10,10 +10,13 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useDispatch, useSelector } from 'react-redux';
+import { doc , getDoc , setDoc } from "firebase/firestore";
+import { db } from '../firebase.setting';
 import DialogCreate from '../components/dailog-create';
 import ProjectsList from '../components/projects/index';
 import Iconify from '../components/iconify';
 import { useContextProvider } from '../context/contextProvider';
+
 
 
 import logo from '../favicon-32x32.png';
@@ -25,13 +28,15 @@ import { actionsProjects } from '../store';
 
 
 
+
 export default function LabTabs(props) {
   const [value, setValue] = useState('1');
   const [open1, setOpen1] = useState(false);
   const [project,setProjects] = useState([])
-  const access = props.access;  
   const dipatch = useDispatch()
-  const { user } = useContextProvider()
+ 
+
+  const { user , can } = useContextProvider()
 
  
 
@@ -57,19 +62,18 @@ export default function LabTabs(props) {
   };
 
   useEffect(()=>{
-    console.log(access , user);
-    if (access.R === false) {
 
-      console.log("OK");
+    if (can("read-his-project") && !can("read-project")) {
+
      
       filterProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e),user.id)
 
       
-    }else{
+    }else if (can("read-project")){
       loadProjects((e)=> dipatch(actionsProjects.loadProjects(e.projects)),(e)=> console.log(e))
     }
     
-  },[]) 
+  },[can("read-his-project"),can("read-project")]) 
 
   
   
@@ -86,7 +90,7 @@ export default function LabTabs(props) {
         <Grid item sm={8} xs={6}>
           <div style={{ display: 'flex', flexDirection: 'row-reverse' }}>
             {
-              access.C &&    <Button
+              can("create-project") &&    <Button
               onClick={addProject}
               sx={{ marginLeft: '20px' }}
               color="secondary"
@@ -120,16 +124,16 @@ export default function LabTabs(props) {
             </TabList>
           </Box>
           <TabPanel value="1">
-            <ProjectsList access={access} setOpen={setOpen1}  projects={projects} type={'all'} />
+            <ProjectsList setOpen={setOpen1}  projects={projects} type={'all'} />
           </TabPanel>
           <TabPanel value="2">
-            <ProjectsList access={access} setOpen={setOpen1} projects={projects} type={'In'} />
+            <ProjectsList  setOpen={setOpen1} projects={projects} type={'In'} />
           </TabPanel>
           <TabPanel value="3">
-            <ProjectsList access={access} setOpen={setOpen1} projects={projects} type={'Com'} />
+            <ProjectsList setOpen={setOpen1} projects={projects} type={'Com'} />
           </TabPanel>
           <TabPanel value="4">
-            <ProjectsList access={access} setOpen={setOpen1} projects={projects} type={'Can'} />
+            <ProjectsList  setOpen={setOpen1} projects={projects} type={'Can'} />
           </TabPanel>
         </TabContext>
       </Box>
